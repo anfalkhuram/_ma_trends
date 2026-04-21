@@ -137,7 +137,7 @@ if (isset($_POST['edit_category'])) {
                                 ?>
                                         <tr class="js-admin-row" data-sr="<?php echo $sr; ?>" data-id="<?php echo $row["id"]; ?>" data-name="<?php echo $row["name"]; ?>" data-slug="<?php echo $row["slug"]; ?>" data-status="<?php echo $row["status"]; ?>">
                                             <td><?php echo $sr; ?></td>
-                                            <td><?php echo $row["id"]; ?></td>
+                                            <td>CTG-<?php echo $row["id"]; ?></td>
                                             <td class="text-capitalize"><?php echo $row["name"]; ?></td>
                                             <td><?php echo $row["slug"]; ?></td>
                                             <td class="btn-status">

@@ -8,7 +8,7 @@
         <ul class="dropdown-menu dropdown-menu-dark w-100 mt-2">
             <li><a class="dropdown-item <?php echo ($pageName == "Dashboard")? "active" : ""; ?>" href="../admins/dashboard">Dashboard</a></li>
             <li><a class="dropdown-item <?php echo ($pageName == "Categories")? "active" : ""; ?>" href="../admins/categories">Categories</a></li>
-            <li><a class="dropdown-item <?php echo ($pageName == "Sub Categories")? "active" : ""; ?>" href="../admins/sub-categories">Sub Categories</a></li>
+            <!-- <li><a class="dropdown-item <?php echo ($pageName == "Sub Categories")? "active" : ""; ?>" href="../admins/sub-categories">Sub Categories</a></li> -->
             <li><a class="dropdown-item <?php echo ($pageName == "Products")? "active" : ""; ?>" href="../admins/products">Products</a></li>
             <li><a class="dropdown-item <?php echo ($pageName == "Orders")? "active" : ""; ?>" href="../admins/orders">Orders</a></li>
             <li><a class="dropdown-item <?php echo ($pageName == "Roles")? "active" : ""; ?>" href="../admins/roles">Roles</a></li>

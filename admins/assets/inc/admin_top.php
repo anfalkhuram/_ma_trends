@@ -1,4 +1,6 @@
 <?php
+ob_start();
+session_start();
 require_once('./assets/inc/config.php');
 require_once('./assets/inc/functions.php');
 

@@ -1,5 +1,7 @@
 <?php
 require_once('./assets/inc/admin_top.php');
+
+
 ?>
 
 <body>
@@ -26,6 +28,16 @@ require_once('./assets/inc/admin_top.php');
 
             <div class="p-3 p-md-4">
                 <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="ma-card p-3 h-100">
+                            <div class="ma-muted small">Total Categories</div>
+                            <div class="h4 fw-bold mb-1"><?php echo getTotal($conn, 'categories'); ?></div>
+                            <div>
+                                <span class="badge  badge-trending rounded-pill">Active: <?php echo getTotalByStatus($conn, 'categories', '1'); ?></span>
+                                <span class="badge badge-ma rounded-pill">Inactive:  <?php echo getTotalByStatus($conn, 'categories', '0'); ?></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-sm-6 col-lg-3">
                         <div class="ma-card p-3 h-100">
                             <div class="ma-muted small">Total products</div>

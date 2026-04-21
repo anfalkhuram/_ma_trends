@@ -19,10 +19,10 @@
           <span class="ma-sidebar-icon"><i class="fa-solid fa-tags"></i></span>
           <span class="ma-sidebar-label">Categories</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Sub Categories') ? "active" : ""; ?>" href="../admins/sub-categories">
+        <!-- <a class="nav-link <?php echo ($pageName == 'Sub Categories') ? "active" : ""; ?>" href="../admins/sub-categories">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-sitemap"></i></span>
           <span class="ma-sidebar-label">Sub Categories</span>
-        </a>
+        </a> -->
         <a class="nav-link <?php echo ($pageName == 'Products') ? "active" : ""; ?>" href="../admins/products">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-box"></i></span>
           <span class="ma-sidebar-label">Products</span>

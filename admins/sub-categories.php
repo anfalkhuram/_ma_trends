@@ -131,7 +131,7 @@ if (isset($_POST['edit_subCategory'])) {
                                 ?>
                                         <tr class="js-admin-row" data-sr="<?php echo $sr; ?>" data-id="<?php echo $row["id"]; ?>" data-name="<?php echo $row["name"]; ?>" data-status="<?php echo $row["status"]; ?>">
                                             <td><?php echo $sr; ?></td>
-                                            <td><?php echo $row["id"]; ?></td>
+                                            <td>SCTG-<?php echo $row["id"]; ?></td>
                                             <td class="text-capitalize"><?php echo $row["name"]; ?></td>
                                             <td class="text-capitalize"><?php
                                                                         $categoryID = $row['category_id'];
