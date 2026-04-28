@@ -239,10 +239,15 @@ a:hover {
 
 .ma-hero-art {
   min-height: 340px;
-  background:
-    radial-gradient(260px 220px at 20% 40%, rgba(152, 255, 74, .14), transparent 60%),
-    radial-gradient(260px 220px at 80% 30%, rgba(215, 180, 106, .16), transparent 60%),
-    linear-gradient(180deg, rgba(17, 19, 25, .25), rgba(11, 12, 15, .75));
+  background-image:url("../img/hero-image.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.custom-padding-margin{
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  margin-top: 0 !important;
 }
 
 .ma-kicker {

@@ -3,7 +3,7 @@ require_once('./assets/inc/admin_top.php');
 ?>
 
 <body>
-    <div class="ma-admin-shell d-flex flex-column flex-md-row">
+    <div class="ma-admin-shell d-flex flex-column flex-md-row ma-admin-collapsed">
         <?php
         require_once('./assets/inc/admin_sidebar.php');
         ?>

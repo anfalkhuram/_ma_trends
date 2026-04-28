@@ -1,49 +1,43 @@
   <aside class="ma-sidebar p-3 p-md-4 d-none d-md-block">
-      <div class="d-flex align-items-center gap-2 mb-4">
-        <span class="ma-pill h6"><img src="../admins/assets/images/ma_trends_ill.png" alt="..." width="25" height="25"></span>
-        <div class="ma-sidebar-header-text mb-2">
-          <div class="fw-bold">Admin</div>
-          <div class="ma-muted custom-font-size">MA Trends</div>
-        </div>
-        <button class="btn btn-ma-ghost btn-sm margin-left js-toggle-sidebar " type="button"
-          aria-label="Toggle sidebar">
-          <i class="fas fa-bars"></i>
-        </button>
+      <div class="d-flex align-items-center mb-4">
+        <span class=" h6"><img src="./assets/images/ma_trends_ill.png" alt="..." width="50" height="50"></span>
+        
       </div>
       <nav class="nav flex-column gap-1 ma-sidebar-nav">
-        <a class="nav-link <?php echo ($pageName == 'Dashboard') ? "active" : ""; ?>" href="../admins/dashboard">
+        <a class="nav-link <?php echo ($pageName == 'Dashboard') ? "active" : ""; ?>" href="../admins/dashboard" data-bs-toggle="tooltip" data-bs-placement="right"  title="Dashboard">
           <span class="ma-sidebar-icon"><i class="fa fa-gauge-high"></i></span>
           <span class="ma-sidebar-label">Dashboard</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Categories') ? "active" : ""; ?>" href="../admins/categories">
+        <a class="nav-link <?php echo ($pageName == 'Categories') ? "active" : ""; ?>" href="../admins/categories" data-bs-toggle="tooltip" data-bs-placement="right"  title="Categories">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-tags"></i></span>
           <span class="ma-sidebar-label">Categories</span>
         </a>
-        <!-- <a class="nav-link <?php echo ($pageName == 'Sub Categories') ? "active" : ""; ?>" href="../admins/sub-categories">
-          <span class="ma-sidebar-icon"><i class="fa-solid fa-sitemap"></i></span>
-          <span class="ma-sidebar-label">Sub Categories</span>
-        </a> -->
-        <a class="nav-link <?php echo ($pageName == 'Products') ? "active" : ""; ?>" href="../admins/products">
+        
+        <a class="nav-link <?php echo ($pageName == 'Products') ? "active" : ""; ?>" href="../admins/products" data-bs-toggle="tooltip" data-bs-placement="right"  title="Products">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-box"></i></span>
           <span class="ma-sidebar-label">Products</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Orders') ? "active" : ""; ?>" href="../admins/orders">
+        <a class="nav-link <?php echo ($pageName == 'Product Details') ? "active" : ""; ?>" href="../admins/product-details" data-bs-toggle="tooltip" data-bs-placement="right"  title="Product Details">
+          <span class="ma-sidebar-icon"><i class="fa-solid fa-circle-info"></i></span>
+          <span class="ma-sidebar-label">Product Details</span>
+        </a>
+        <a class="nav-link <?php echo ($pageName == 'Orders') ? "active" : ""; ?>" href="../admins/orders" data-bs-toggle="tooltip" data-bs-placement="right"  title="Orders">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-truck"></i></span>
           <span class="ma-sidebar-label">Orders</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Roles') ? "active" : ""; ?>" href="../admins/roles">
+        <a class="nav-link <?php echo ($pageName == 'Roles') ? "active" : ""; ?>" href="../admins/roles" data-bs-toggle="tooltip" data-bs-placement="right" title="Roles">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-user-shield"></i></span>
           <span class="ma-sidebar-label">Roles</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Users') ? "active" : ""; ?>" href="../admins/users">
+        <a class="nav-link <?php echo ($pageName == 'Users') ? "active" : ""; ?>" href="../admins/users" data-bs-toggle="tooltip" data-bs-placement="right" title="Users">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-users"></i></span>
           <span class="ma-sidebar-label">Users</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Contacts') ? "active" : ""; ?>" href="../admins/contacts">
+        <a class="nav-link <?php echo ($pageName == 'Contacts') ? "active" : ""; ?>" href="../admins/contacts" data-bs-toggle="tooltip" data-bs-placement="right" title="Contacts">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-envelope"></i></span>
           <span class="ma-sidebar-label">Contacts</span>
         </a>
-        <a class="nav-link" href="../index.html">
+        <a class="nav-link" href="../index.html" data-bs-toggle="tooltip" data-bs-placement="right" title="Visit Website">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
           <span class="ma-sidebar-label">View site</span>
         </a>

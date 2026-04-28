@@ -4,14 +4,12 @@ require_once('./assets/inc/admin_top.php');
 
 // update status
 if (isset($_POST["updateStatus"])) {
-    $id = $_POST["id"];
-    $status = $_POST["status"];
+    $id         = (int)$_POST["id"];
+    $status     = (int)$_POST["status"];
     $new_status = ($status == 1) ? 0 : 1;
-    $sql = "UPDATE categories SET status = $new_status WHERE id = $id";
-    $result = mysqli_query($conn, $sql);
-    // change status of sub category too
-    $sql_subCategories = "UPDATE sub_categories SET status = $new_status WHERE category_id = $id";
-    $result_subCategories = mysqli_query($conn, $sql_subCategories);
+
+    mysqli_query($conn, "UPDATE categories SET status = $new_status WHERE id = $id");
+    mysqli_query($conn, "UPDATE products SET status = $new_status WHERE category_id = $id");
     echo $new_status;
     exit;
 }
@@ -63,7 +61,7 @@ if (isset($_POST['edit_category'])) {
 
 <body>
 
-    <div class="ma-admin-shell d-flex flex-column flex-md-row">
+    <div class="ma-admin-shell d-flex flex-column flex-md-row ma-admin-collapsed">
         <?php
         require_once('./assets/inc/admin_sidebar.php');
         ?>
@@ -135,7 +133,7 @@ if (isset($_POST['edit_category'])) {
                                     while ($row = mysqli_fetch_assoc($resultCategories)) {
                                         $sr++;
                                 ?>
-                                        <tr class="js-admin-row" data-sr="<?php echo $sr; ?>" data-id="<?php echo $row["id"]; ?>" data-name="<?php echo $row["name"]; ?>" data-slug="<?php echo $row["slug"]; ?>" data-status="<?php echo $row["status"]; ?>">
+                                        <tr class="js-admin-row" data-sr="<?php echo $sr; ?>" data-id="<?php echo $row["id"]; ?>" data-name="<?php echo $row["name"]; ?>">
                                             <td><?php echo $sr; ?></td>
                                             <td>CTG-<?php echo $row["id"]; ?></td>
                                             <td class="text-capitalize"><?php echo $row["name"]; ?></td>
@@ -191,7 +189,7 @@ if (isset($_POST['edit_category'])) {
         <form class="modal-dialog modal-dialog-centered" method="post" action="categories" id="add_category_form">
             <div class="modal-content ma-bg-surface border ma-border ma-rounded">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title">Add category</h5>
+                    <h5 class="modal-title text-white">Add category</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -226,7 +224,7 @@ if (isset($_POST['edit_category'])) {
         <form class="modal-dialog modal-dialog-centered" method="post" action="categories" id="edit_category_form">
             <div class="modal-content ma-bg-surface border ma-border ma-rounded">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title">Edit category</h5>
+                    <h5 class="modal-title text-white">Edit category</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <input type="hidden" class="form-control" name="id">
@@ -263,7 +261,7 @@ if (isset($_POST['edit_category'])) {
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ma-bg-surface border ma-border ma-rounded">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title">Delete category?</h5>
+                    <h5 class="modal-title text-white">Delete category?</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ma-muted">Are you sure to delete <span class="badge badge-trending rounded-pill text-capitalize fs-6">category name</span></div>

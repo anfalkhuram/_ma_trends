@@ -5,7 +5,7 @@ require_once('./assets/inc/admin_top.php');
 ?>
 
 <body>
-    <div class="ma-admin-shell d-flex flex-column flex-md-row">
+    <div class="ma-admin-shell d-flex flex-column flex-md-row ma-admin-collapsed">
         <!-- adminsidebar start -->
         <?php
         require_once('./assets/inc/admin_sidebar.php');
@@ -41,8 +41,11 @@ require_once('./assets/inc/admin_top.php');
                     <div class="col-sm-6 col-lg-3">
                         <div class="ma-card p-3 h-100">
                             <div class="ma-muted small">Total products</div>
-                            <div class="h4 fw-bold mb-1">248</div>
-                            <div class="badge badge-trending rounded-pill">+8 new</div>
+                            <div class="h4 fw-bold mb-1"><?php echo getTotal($conn, 'products'); ?></div>
+                             <div>
+                                <span class="badge  badge-trending rounded-pill">Active: <?php echo getTotalByStatus($conn, 'products', '1'); ?></span>
+                                <span class="badge badge-ma rounded-pill">Inactive:  <?php echo getTotalByStatus($conn, 'products', '0'); ?></span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6 col-lg-3">

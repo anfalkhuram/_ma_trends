@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#171a22"/>
+      <stop offset="0.55" stop-color="#0b0c0f"/>
+      <stop offset="1" stop-color="#111319"/>
+    </linearGradient>
+    <radialGradient id="r1" cx="20%" cy="35%" r="55%">
+      <stop offset="0" stop-color="#98ff4a" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#98ff4a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="r2" cx="78%" cy="28%" r="55%">
+      <stop offset="0" stop-color="#d7b46a" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#d7b46a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <rect width="1200" height="1200" fill="url(#r1)"/>
+  <rect width="1200" height="1200" fill="url(#r2)"/>
+  <g fill="none" stroke="#f4f1ea" stroke-opacity="0.14">
+    <rect x="70" y="70" width="1060" height="1060" rx="56"/>
+    <path d="M210 820 L460 560 L640 720 L860 500 L990 640" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="360" cy="410" r="72" stroke-width="16"/>
+  </g>
+  <g fill="#f4f1ea" fill-opacity="0.78" font-family="Poppins, Arial, sans-serif" text-anchor="middle">
+    <text x="600" y="620" font-size="58" font-weight="700" letter-spacing="1.5">MA TRENDS</text>
+    <text x="600" y="690" font-size="28" font-weight="500" fill-opacity="0.65">Replace with product imagery</text>
+  </g>
+</svg>
+
