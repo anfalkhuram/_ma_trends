@@ -1,15 +1,15 @@
  <?php
-    $pageTitle = "Trending Watches for Men & Women | MATrends";
+    $pageTitle = "Trending Jewelry for Men & Women | MATrends";
 
-    $description = "Shop trending watches for men and women at MATrends. Stylish, affordable and modern watches perfect for everyday wear and gifting.";
+    $description = "Shop trending jewelry at MATrends. Discover stylish rings, necklaces, bracelets and modern fashion jewelry for men and women at affordable prices.";
 
-    $keywords = "trending watches, watches for men, watches for women, fashion watches Pakistan, buy watches online, MATrends watches, stylish watches";
+    $keywords = "trending jewelry, fashion jewelry Pakistan, jewelry for men, jewelry for women, buy jewelry online, MATrends jewelry, stylish rings, necklaces, bracelets";
 
     $author = "MATrends";
     $robots = "index, follow";
 
-    $ogTitle = "Trending Watches for Men & Women | MATrends";
-    $ogDescription = "Discover stylish and affordable watches at MATrends. Trending designs for men and women.";
+    $ogTitle = "Trending Jewelry for Men & Women | MATrends";
+    $ogDescription = "Discover stylish and affordable jewelry at MATrends. Rings, necklaces and bracelets in trending designs.";
     $ogType = "website";
     $ogUrl = "https://www.matrends.store/shop";
 
@@ -103,8 +103,8 @@
                          </div>
                  <?php
                         }
-                    }else{
-                         echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
+                    } else {
+                        echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
                     }
                     ?>
 

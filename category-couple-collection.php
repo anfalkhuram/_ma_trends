@@ -1,17 +1,17 @@
  <?php
-    $pageTitle = "Trending Watches for Men & Women | MATrends";
+$pageTitle = "Couple Collection – Rings & Accessories for Couples | MATrends";
 
-    $description = "Shop trending watches for men and women at MATrends. Stylish, affordable and modern watches perfect for everyday wear and gifting.";
+$description = "Shop couple collection at MATrends. Discover matching couple rings, bracelets and stylish accessories designed for him and her at affordable prices.";
 
-    $keywords = "trending watches, watches for men, watches for women, fashion watches Pakistan, buy watches online, MATrends watches, stylish watches";
+$keywords = "couple collection, couple rings, matching rings for couples, couple accessories, his and hers rings, couple jewelry Pakistan, MATrends couple collection";
 
-    $author = "MATrends";
-    $robots = "index, follow";
+$author = "MATrends";
+$robots = "index, follow";
 
-    $ogTitle = "Trending Watches for Men & Women | MATrends";
-    $ogDescription = "Discover stylish and affordable watches at MATrends. Trending designs for men and women.";
-    $ogType = "website";
-    $ogUrl = "https://www.matrends.store/shop";
+$ogTitle = "Couple Collection – Matching Rings & Accessories | MATrends";
+$ogDescription = "Explore matching couple rings and accessories at MATrends. Stylish designs for him and her.";
+$ogType = "website";
+$ogUrl = "https://www.matrends.store/shop";
 
 
     require_once("inc/top.php");
@@ -103,8 +103,8 @@
                          </div>
                  <?php
                         }
-                    }else{
-                         echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
+                    } else {
+                        echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
                     }
                     ?>
 

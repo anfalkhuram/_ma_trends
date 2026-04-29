@@ -13,7 +13,7 @@ $pageName = ucwords(str_replace("-", " ", basename($_SERVER['PHP_SELF'], ".php")
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin <?php echo $pageName ?> — MA Trends</title>
+    <title>Admin <?php echo $pageName ?></title>
     <meta name="description" content="Admin dashboard UI — MA Trends." />
     <link rel="shortcut icon" href="./assets/images/ma_trends_ill.png" type="image/x-icon">
 

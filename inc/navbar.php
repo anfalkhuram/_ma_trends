@@ -19,17 +19,22 @@
 
          <div class="collapse navbar-collapse" id="navMain">
              <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-                 <li class="nav-item"><a class="nav-link ma-hover-underline" href="index">Home</a></li>
-                 <li class="nav-item"><a class="nav-link ma-hover-underline" href="pages/shop.html">Shop</a></li>
-                 <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                 <li class="nav-item"><a class="nav-link ma-hover-underline <?php  echo($pageName == 'Home')?'active':'';?>" href="index">Home</a></li>
+                 <li class="nav-item"><a class="nav-link ma-hover-underline <?php  echo($pageName == 'Shop')?'active':'';?>" href="shop">Shop</a></li>
+                 <li class="nav-item dropdown ma-hover-underline">
+                     <a class="nav-link dropdown-toggle 
+                     <?php 
+                     echo($pageName == 'Category Watches'  || $pageName == 'Category Bags' || $pageName == 'Category Jewelry' || $pageName == 'Category Sun Glasses' || $pageName == 'Category Couple Collection' || $pageName == 'Category Accessories')?'active':'';
+                     ?>" href="#" role="button" data-bs-toggle="dropdown"
                          aria-expanded="false">Categories</a>
                      <ul class="dropdown-menu dropdown-menu-dark ma-bg-surface-2 border ma-border">
                          <?php
                             if (mysqli_num_rows($resultCategories) > 0) {
                                 while ($rowCategory = mysqli_fetch_assoc($resultCategories)) {
                             ?>
-                                 <li><a class="dropdown-item text-capitalize" href=".<?php echo $rowCategory['slug']; ?>?id=<?php echo $rowCategory['id']; ?>"><?php echo $rowCategory['name']; ?></a></li>
+                                 <li><a class="dropdown-item text-capitalize <?php 
+                                    echo($pageName == 'Category '.ucwords($rowCategory['name'])?'active':'');
+                                 ?>" href=".<?php echo $rowCategory['slug']; ?>?id=<?php echo $rowCategory['id']; ?>"><?php echo $rowCategory['name']; ?></a></li>
 
                          <?php
                                 }

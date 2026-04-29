@@ -37,8 +37,8 @@ require_once('inc/top.php');
                         Premium looks, everyday prices. Curated accessories for men, women, and unisex style.
                     </p>
                     <div class="d-flex flex-wrap gap-2">
-                        <a class="btn btn-ma" href="pages/shop.html#trending">Shop Trending</a>
-                        <a class="btn btn-ma-outline" href="pages/shop.html">Explore All</a>
+                        <a class="btn btn-ma" href="shop">Shop Trending</a>
+                        <a class="btn btn-ma-outline" href="shop">Explore All</a>
                     </div>
                     <div class="d-flex flex-wrap gap-2 mt-4">
                         <span class="badge badge-trending rounded-pill px-3 py-2">Trending highlights</span>
@@ -59,7 +59,7 @@ require_once('inc/top.php');
                     <h2 class="h3 fw-bold mb-1">Trending This Week</h2>
                     <div class="ma-muted">Hot picks people are saving right now.</div>
                 </div>
-                <a class="btn btn-ma-ghost" href="pages/shop.html#trending">Shop more →</a>
+                <a class="btn btn-ma-ghost" href="shop">Shop more -></a>
             </div>
 
             <div class="row g-4">
@@ -141,7 +141,7 @@ require_once('inc/top.php');
                     while ($rowCategory = mysqli_fetch_assoc($resultCategories)) {
                 ?>
                         <div class="col-6 col-lg-3">
-                            <a class="ma-card p-4 d-block text-decoration-none" href="pages<?php echo $rowCategory['slug']; ?>">
+                            <a class="ma-card p-4 d-block text-decoration-none" href=".<?php echo $rowCategory['slug']; ?>?id=<?php echo $rowCategory['id'];?>">
                                 <div class="fw-bold mb-1 text-capitalize"><?php echo $rowCategory['name']; ?></div>
                             </a>
                         </div>
@@ -192,7 +192,7 @@ require_once('inc/top.php');
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a class="btn btn-ma" href="pages/category-couple-collection">Explore Couple Collection</a>
+                            <a class="btn btn-ma" href="category-couple-collection">Explore Couple Collection</a>
                         </div>
                     </div>
                 </div>

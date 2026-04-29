@@ -1,5 +1,10 @@
 <?php
 require_once("config.php");
+$pageName = ucwords(str_replace("-", " ", basename($_SERVER['PHP_SELF'], ".php")));
+
+if($pageName == 'Index'){
+  $pageName = 'Home';
+}
 ?>
 
 <!DOCTYPE html>
@@ -7,18 +12,18 @@ require_once("config.php");
 
 <head>
   <meta charset="utf-8" />
-  <meta name="description" content="<?php echo $description;?>"/>
-  <meta name="keywords" content="<?php echo $keywords;?>"/>
-  <meta name="author" content="<?php echo $author;?>"/>
-  <meta name="robots" content="<?php echo $robots;?>"/>
+  <meta name="description" content="<?php echo $description; ?>" />
+  <meta name="keywords" content="<?php echo $keywords; ?>" />
+  <meta name="author" content="<?php echo $author; ?>" />
+  <meta name="robots" content="<?php echo $robots; ?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta property="og:title" content="<?php echo $ogTitle;?>"/>
-  <meta property="og:description" content="<?php echo $ogDescription;?>"/>
-  <meta property="og:type" content="<?php echo $ogType;?>"/>
-  <meta property="og:url" content="<?php echo $ogUrl;?>"/>
+  <meta property="og:title" content="<?php echo $ogTitle; ?>" />
+  <meta property="og:description" content="<?php echo $ogDescription; ?>" />
+  <meta property="og:type" content="<?php echo $ogType; ?>" />
+  <meta property="og:url" content="<?php echo $ogUrl; ?>" />
 
-  <title><?php echo $pageTitle?></title>
+  <title><?php echo $pageTitle ?></title>
 
 
   <link rel="shortcut icon" href="assets/img/ma_trends_ill.png" type="image/x-icon">

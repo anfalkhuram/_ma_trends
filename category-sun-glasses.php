@@ -1,17 +1,17 @@
  <?php
-    $pageTitle = "Trending Watches for Men & Women | MATrends";
+ $pageTitle = "Trending Sunglasses for Men & Women | MATrends";
 
-    $description = "Shop trending watches for men and women at MATrends. Stylish, affordable and modern watches perfect for everyday wear and gifting.";
+$description = "Shop trending sunglasses for men and women at MATrends. Stylish, lightweight and affordable sunglasses perfect for everyday wear and summer looks.";
 
-    $keywords = "trending watches, watches for men, watches for women, fashion watches Pakistan, buy watches online, MATrends watches, stylish watches";
+$keywords = "trending sunglasses, sunglasses for men, sunglasses for women, stylish sunglasses Pakistan, buy sunglasses online, MATrends sunglasses, fashion sunglasses";
 
-    $author = "MATrends";
-    $robots = "index, follow";
+$author = "MATrends";
+$robots = "index, follow";
 
-    $ogTitle = "Trending Watches for Men & Women | MATrends";
-    $ogDescription = "Discover stylish and affordable watches at MATrends. Trending designs for men and women.";
-    $ogType = "website";
-    $ogUrl = "https://www.matrends.store/shop";
+$ogTitle = "Trending Sunglasses for Men & Women | MATrends";
+$ogDescription = "Discover stylish and affordable sunglasses at MATrends. Trending designs for men and women.";
+$ogType = "website";
+$ogUrl = "https://www.matrends.store/shop";
 
 
     require_once("inc/top.php");
@@ -103,8 +103,8 @@
                          </div>
                  <?php
                         }
-                    }else{
-                         echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
+                    } else {
+                        echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
                     }
                     ?>
 

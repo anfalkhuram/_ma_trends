@@ -1,17 +1,17 @@
  <?php
-    $pageTitle = "Trending Watches for Men & Women | MATrends";
+    $pageTitle = "Trending Bags for Men & Women | MATrends";
 
-    $description = "Shop trending watches for men and women at MATrends. Stylish, affordable and modern watches perfect for everyday wear and gifting.";
+    $description = "Shop trending bags at MATrends. Discover stylish handbags, crossbody bags, shoulder bags and everyday carry bags for men and women at affordable prices.";
 
-    $keywords = "trending watches, watches for men, watches for women, fashion watches Pakistan, buy watches online, MATrends watches, stylish watches";
+    $keywords = "trending bags, handbags Pakistan, bags for men, bags for women, buy bags online, MATrends bags, stylish handbags, crossbody bags";
 
     $author = "MATrends";
     $robots = "index, follow";
 
-    $ogTitle = "Trending Watches for Men & Women | MATrends";
-    $ogDescription = "Discover stylish and affordable watches at MATrends. Trending designs for men and women.";
+    $ogTitle = "Trending Bags for Men & Women | MATrends";
+    $ogDescription = "Discover stylish and affordable bags at MATrends. Handbags, crossbody bags and everyday carry designs.";
     $ogType = "website";
-    $ogUrl = "https://www.matrends.store/shop";
+    $ogUrl = "https://www.matrends.store/category-bags";
 
 
     require_once("inc/top.php");
@@ -103,8 +103,8 @@
                          </div>
                  <?php
                         }
-                    }else{
-                         echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
+                    } else {
+                        echo '<div class="col-12"><p class="text-center ma-muted">No products available at the moment.</p></div>';
                     }
                     ?>
 
