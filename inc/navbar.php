@@ -45,8 +45,9 @@
                      </ul>
                  </li>
                  <li class="nav-item"><a class="nav-link ma-hover-underline" href="pages/login.html">Login</a></li>
-                 <li class="nav-item ms-lg-2">
-                     <a class="btn btn-ma-outline btn-sm" href="pages/cart.html">Cart</a>
+                 <li class="nav-item ms-lg-2 position-relative">
+                     <a class="btn btn-ma-outline btn-sm " href="cart">Cart</a>
+                     <span class="cart-count fw-bold">3</span>
                  </li>
                  <li class="nav-item ms-lg-2">
                      <a class="btn btn-ma-outline btn-sm" href="pages/cart.html">Orders</a>

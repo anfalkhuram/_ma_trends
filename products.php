@@ -17,7 +17,7 @@ if ($productId) {
     $sqlCategory = "SELECT * FROM categories WHERE id = $productCategoryId;";
     $resultCategory = mysqli_query($conn, $sqlCategory);
     $category = mysqli_fetch_assoc($resultCategory);
-}else{
+} else {
     // Redirect to shop page if no product ID is provided
     header("Location: shop");
     exit();
@@ -93,6 +93,23 @@ require_once('inc/top.php');
                             <div>
                                 <h1 class="h2 fw-bold mb-2"><?php echo $rowProduct['name']; ?></h1>
                                 <div class="ma-muted"><?php echo $rowProduct['properties']; ?></div>
+                                <div class="ma-rating mt-2">
+                                    <?php
+                                    $rating = floor($rowProductDetails['ratings']);
+
+                                    // Filled stars
+                                    for ($i = 0; $i < $rating; $i++) {
+                                        echo '<i class="fas fa-star"></i>';
+                                    }
+
+                                    // Empty stars
+                                    for ($i = $rating; $i < 5; $i++) {
+                                        echo '<i class="far fa-star"></i>';
+                                    }
+                                    ?>
+
+
+                                </div>
                             </div>
 
                         </div>
@@ -119,14 +136,13 @@ require_once('inc/top.php');
 
                         </div>
 
-                        <div class="mt-4 d-flex flex-wrap gap-2 align-items-center">
+                        <div class="mt-4 d-flex flex-wrap justify-content-between align-items-center">
                             <div class="js-qty-wrap d-flex align-items-center gap-2">
                                 <button class="btn btn-ma-outline js-qty-minus" type="button" aria-label="Decrease">−</button>
                                 <input class="form-control js-qty text-center" value="1" style="max-width: 90px;" />
                                 <button class="btn btn-ma-outline js-qty-plus" type="button" aria-label="Increase">+</button>
                             </div>
-                            <a class="btn btn-ma flex-grow-1 flex-md-grow-0" href="cart.html">Add to Cart</a>
-                            <a class="btn btn-ma-outline flex-grow-1 flex-md-grow-0" href="cart.html">Buy Now</a>
+                            <a class="btn btn-ma flex-grow-1 flex-md-grow-0 mt-2 mt-md-0 mt-lg-0" href="cart">Add to Cart</a>
                         </div>
 
                         <hr class="border ma-border my-4" />
@@ -145,61 +161,7 @@ require_once('inc/top.php');
                 </div>
             </div>
 
-            <!-- Reviews -->
-            <section class="ma-section pb-0">
-                <div class="row g-4">
-                    <div class="col-lg-7">
-                        <div class="ma-card p-4">
-                            <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-                                <h2 class="h4 fw-bold mb-0">Reviews & Ratings</h2>
-                                <span class="badge badge-ma rounded-pill"><?php echo $rowProductDetails['ratings']; ?> / 5</span>
-                            </div>
-                            <div class="d-flex flex-column gap-3">
-                                <div class="ma-card p-3">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="fw-semibold">Amina</div>
-                                        <div class="ma-muted">★★★★★</div>
-                                    </div>
-                                    <div class="ma-muted small mt-1">Looks premium and feels comfortable. Perfect for daily outfits.</div>
-                                </div>
-                                <div class="ma-card p-3">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="fw-semibold">Omar</div>
-                                        <div class="ma-muted">★★★★☆</div>
-                                    </div>
-                                    <div class="ma-muted small mt-1">Great minimal style. Would love more strap options.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="ma-card p-4">
-                            <h3 class="h5 fw-bold">Write a review</h3>
-                            <div class="ma-muted small mb-3">Front-end UI only.</div>
-                            <div class="mb-3">
-                                <label class="form-label ma-muted">Name</label>
-                                <input class="form-control" placeholder="Your name" />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label ma-muted">Rating</label>
-                                <select class="form-select">
-                                    <option selected>5 stars</option>
-                                    <option>4 stars</option>
-                                    <option>3 stars</option>
-                                    <option>2 stars</option>
-                                    <option>1 star</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label ma-muted">Comment</label>
-                                <textarea class="form-control" rows="4" placeholder="Share your experience..."></textarea>
-                            </div>
-                            <button class="btn btn-ma w-100" type="button" data-bs-toggle="modal"
-                                data-bs-target="#uiOnlyModal">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
 
             <!-- Related Trending Products -->
             <section class="ma-section">
@@ -208,69 +170,65 @@ require_once('inc/top.php');
                         <h2 class="h4 fw-bold mb-1">Related Trending Products</h2>
                         <div class="ma-muted">More picks to match your look.</div>
                     </div>
-                    <a class="btn btn-ma-ghost" href="shop.html#trending">Shop trending →</a>
+                    <a class="btn btn-ma-ghost" href="shop">Shop trending →</a>
                 </div>
                 <div class="row g-4">
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="ma-card ma-product">
-                            <a class="ma-wishlist js-wishlist text-decoration-none" href="#" data-liked="false"><span
-                                    data-icon>♡</span></a>
-                            <img class="ma-card-img" src="../assets/img/placeholder.svg" alt="Matte Black Sunglasses" />
-                            <div class="p-3">
-                                <span class="badge badge-trending rounded-pill">🔥 Trending</span>
-                                <div class="fw-semibold mt-2">Matte Black Sunglasses</div>
-                                <div class="d-flex align-items-center justify-content-between mt-2">
-                                    <div class="ma-price">$39</div>
-                                    <a class="btn btn-sm btn-ma-outline" href="product.html">View</a>
+
+
+                    <?php
+                    $sqlProducts = "SELECT p.* FROM products p JOIN product_details pd ON pd.product_id = p.id WHERE p.status = 1 AND pd.label = 2 LIMIT 4;";
+                    $resultProducts = mysqli_query($conn, $sqlProducts);
+                    if (mysqli_num_rows($resultProducts) > 0) {
+                        while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
+                            $productCategoryId = $rowProduct['category_id'];
+                            $sqlCategory = "SELECT * FROM categories WHERE id = $productCategoryId;";
+                            $resultCategory = mysqli_query($conn, $sqlCategory);
+                            $category = mysqli_fetch_assoc($resultCategory);
+
+                            $productIDForDetails = $rowProduct['id'];
+                            $sqlProductDetails = "SELECT * FROM product_details WHERE product_id = $productIDForDetails;";
+                            $resultProductDetails = mysqli_query($conn, $sqlProductDetails);
+                            $productDetails = mysqli_fetch_assoc($resultProductDetails);
+                    ?>
+                            <div class="col-12 col-md-4 col-xl-3">
+                                <div class="ma-card ma-product">
+
+                                    <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" />
+                                    <div class="p-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+
+                                            <?php
+
+                                            if ($productDetails['label'] == 1) {
+                                                echo '<span class="badge badge-ma rounded-pill">Normal</span>';
+                                            } elseif ($productDetails['label'] == 2) {
+                                                echo '<span class="badge badge-trending rounded-pill">🔥 Trending</span>';
+                                            } else {
+                                                echo '<span class="badge badge-ma rounded-pill">New Drop</span>';
+                                            }
+                                            ?>
+
+
+                                            <span class="small ma-muted text-capitalize"><?php echo $category['name']; ?></span>
+                                        </div>
+                                        <div class="fw-semibold"><?php echo $rowProduct['name']; ?></div>
+                                        <div class="d-flex align-items-center justify-content-between mt-2">
+                                            <div class="ma-price">Rs. <?php echo $rowProduct['price']; ?></div>
+                                            <div class="d-flex">
+                                                <a class="btn btn-sm btn-ma me-1" href="#">Buy</a>
+                                                <a class="btn btn-sm btn-ma-outline" href="products?id=<?php echo $rowProduct['id']; ?>">View</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="ma-card ma-product">
-                            <a class="ma-wishlist js-wishlist text-decoration-none" href="#" data-liked="false"><span
-                                    data-icon>♡</span></a>
-                            <img class="ma-card-img" src="../assets/img/placeholder.svg" alt="Minimal Ring Set" />
-                            <div class="p-3">
-                                <span class="badge badge-trending rounded-pill">🔥 Trending</span>
-                                <div class="fw-semibold mt-2">Minimal Ring Set</div>
-                                <div class="d-flex align-items-center justify-content-between mt-2">
-                                    <div class="ma-price">$24</div>
-                                    <a class="btn btn-sm btn-ma-outline" href="product.html">View</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="ma-card ma-product">
-                            <a class="ma-wishlist js-wishlist text-decoration-none" href="#" data-liked="false"><span
-                                    data-icon>♡</span></a>
-                            <img class="ma-card-img" src="../assets/img/placeholder.svg" alt="Beige Mini Bag" />
-                            <div class="p-3">
-                                <span class="badge badge-trending rounded-pill">🔥 Trending</span>
-                                <div class="fw-semibold mt-2">Beige Mini Bag</div>
-                                <div class="d-flex align-items-center justify-content-between mt-2">
-                                    <div class="ma-price">$49</div>
-                                    <a class="btn btn-sm btn-ma-outline" href="product.html">View</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="ma-card ma-product">
-                            <a class="ma-wishlist js-wishlist text-decoration-none" href="#" data-liked="false"><span
-                                    data-icon>♡</span></a>
-                            <img class="ma-card-img" src="../assets/img/placeholder.svg" alt="Couple Chain Set" />
-                            <div class="p-3">
-                                <span class="badge badge-trending rounded-pill">🔥 Trending</span>
-                                <div class="fw-semibold mt-2">Couple Chain Set</div>
-                                <div class="d-flex align-items-center justify-content-between mt-2">
-                                    <div class="ma-price">$29</div>
-                                    <a class="btn btn-sm btn-ma-outline" href="product.html">View</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                        }
+                    } else {
+                        echo '<div class="col-12"><p class="text-center ma-muted">No trending products available at the moment.</p></div>';
+                    }
+                    ?>
+
                 </div>
             </section>
         </div>
