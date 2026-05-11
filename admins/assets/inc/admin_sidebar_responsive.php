@@ -17,7 +17,7 @@
             <li>
                 <hr class="dropdown-divider" />
             </li>
-            <li><a class="dropdown-item" href="../index.html">View site</a></li>
+            <li><a class="dropdown-item" href="../index" target="_blank">View site</a></li>
             <!-- <li><a class="dropdown-item" href="login.html">Logout</a></li> -->
         </ul>
     </div>

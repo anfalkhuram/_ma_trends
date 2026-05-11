@@ -129,7 +129,7 @@ require_once('inc/top.php');
                                     <div class="d-flex align-items-center justify-content-between mt-2">
                                         <div class="ma-price">Rs. <?php echo $rowProduct['price']; ?></div>
                                         <div class="d-flex">
-                                            <a class="btn btn-sm btn-ma me-1" href="#">Buy</a>
+                                            <button class="btn btn-sm btn-ma me-1 js-add-to-cart" data-product-id="<?php echo $rowProduct['id']; ?>">Buy</button>
                                             <a class="btn btn-sm btn-ma-outline" href="products?id=<?php echo $rowProduct['id']; ?>">View</a>
                                         </div>
                                     </div>
@@ -164,7 +164,7 @@ require_once('inc/top.php');
                                     <div class="h4 mt-2 mb-3 ma-price" id="quickViewPrice">$0</div>
                                     <div class="d-flex gap-2">
                                         <a href="product.html" class="btn btn-ma">Open product</a>
-                                        <a href="cart.html" class="btn btn-ma-outline">Add to cart</a>
+                                        <a href="<?php echo isLoggedIn() ? 'cart' : 'login?redirect=cart'; ?>" class="btn btn-ma">Add to cart</a>
                                     </div>
                                 </div>
                             </div>
@@ -185,9 +185,7 @@ require_once('inc/top.php');
     <?php
     require_once('inc/bottom.php');
     ?>
-    <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+    
 </body>
 
 </html>

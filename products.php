@@ -142,7 +142,7 @@ require_once('inc/top.php');
                                 <input class="form-control js-qty text-center" value="1" style="max-width: 90px;" />
                                 <button class="btn btn-ma-outline js-qty-plus" type="button" aria-label="Increase">+</button>
                             </div>
-                            <a class="btn btn-ma flex-grow-1 flex-md-grow-0 mt-2 mt-md-0 mt-lg-0" href="cart">Add to Cart</a>
+                                <button class="btn btn-ma flex-grow-1 flex-md-grow-0 mt-2 mt-md-0 mt-lg-0 js-add-to-cart" data-product-id="<?php echo $productId; ?>">Add to Cart</button>
                         </div>
 
                         <hr class="border ma-border my-4" />
@@ -215,7 +215,7 @@ require_once('inc/top.php');
                                         <div class="d-flex align-items-center justify-content-between mt-2">
                                             <div class="ma-price">Rs. <?php echo $rowProduct['price']; ?></div>
                                             <div class="d-flex">
-                                                <a class="btn btn-sm btn-ma me-1" href="#">Buy</a>
+                                                <button class="btn btn-sm btn-ma me-1 js-add-to-cart" data-product-id="<?php echo $rowProduct['id']; ?>">Buy</button>
                                                 <a class="btn btn-sm btn-ma-outline" href="products?id=<?php echo $rowProduct['id']; ?>">View</a>
                                             </div>
                                         </div>
@@ -259,9 +259,7 @@ require_once('inc/top.php');
     <?php
     require_once('inc/bottom.php');
     ?>
-    <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+  
 </body>
 
 </html>

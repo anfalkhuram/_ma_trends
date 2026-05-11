@@ -85,6 +85,15 @@ a:hover {
   box-shadow: var(--ma-shadow) !important;
 }
 
+.color-gold {
+  color: var(--ma-gold) !important;
+}
+
+.ma-hover-gold:hover {
+  color: var(--ma-gold) !important;
+  transition: color 0.2s ease;
+}
+
 /* Navbar */
 .ma-navbar {
   backdrop-filter: blur(10px);
@@ -175,6 +184,47 @@ a:hover {
   font-size: 11px;
 }
 
+
+/* Custom Toasts & Modals (Premium Vibe) */
+.toast {
+  background: rgba(17, 19, 25, 0.9) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--ma-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.toast.bg-success {
+  border-left: 4px solid var(--ma-trend) !important;
+}
+
+.toast.bg-danger {
+  border-left: 4px solid var(--ma-danger) !important;
+}
+
+.toast-body {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.modal-content.ma-card {
+  background: linear-gradient(165deg, rgba(17, 19, 25, 1), rgba(11, 12, 15, 0.95)) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--ma-border) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7) !important;
+}
+
+.modal-content.ma-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ma-gold), transparent);
+  opacity: 0.4;
+}
+
 .ma-rating i {
   color: var(--ma-gold);
   margin-right: 2px;
@@ -260,12 +310,12 @@ a:hover {
 
 .ma-hero-art {
   min-height: 340px;
-  background-image:url("../img/hero-image.png");
+  background-image: url("../img/hero-image.png");
   background-size: cover;
   background-position: center;
 }
 
-.custom-padding-margin{
+.custom-padding-margin {
   padding-right: 0 !important;
   padding-left: 0 !important;
   margin-top: 0 !important;
@@ -369,7 +419,7 @@ a:hover {
 }
 
 /* Push main content right to avoid sidebar overlap */
-.ma-admin-shell > main {
+.ma-admin-shell>main {
   margin-left: 260px;
   transition: margin-left .25s ease;
 }
@@ -409,7 +459,7 @@ a:hover {
 }
 
 /* Shrink main margin when sidebar collapses */
-.ma-admin-shell.ma-admin-collapsed > main {
+.ma-admin-shell.ma-admin-collapsed>main {
   margin-left: 80px;
 }
 
@@ -675,5 +725,113 @@ a:hover {
 @media (max-width: 991.98px) {
   .ma-hero {
     padding-top: 104px;
+  }
+}
+
+/* Auth / login page */
+.alert-ma-error {
+  background: rgba(255, 77, 109, .12);
+  border: 1px solid rgba(255, 77, 109, .35);
+  color: var(--ma-text);
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  font-size: .9rem;
+}
+
+/* Active tab pill (login / register toggle) */
+.btn-ma-outline.active-tab {
+  background: rgba(215, 180, 106, .18);
+  border-color: rgba(215, 180, 106, .55);
+  color: var(--ma-gold);
+}
+
+/* Profile Page */
+.ma-profile-nav .nav-link {
+  color: var(--ma-muted);
+  text-align: left;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-bottom: 5px;
+}
+
+.ma-profile-nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ma-text);
+}
+
+.ma-profile-nav .nav-link.active {
+  background: var(--ma-gold);
+  color: #0b0c0f !important;
+}
+
+.alert-ma-success {
+  background: rgba(152, 255, 74, .12);
+  border: 1px solid rgba(152, 255, 74, .35);
+  color: var(--ma-text);
+  border-radius: 12px;
+}
+
+.border-gold {
+  border-color: var(--ma-gold) !important;
+}
+
+/* Navbar Avatar */
+.ma-nav-avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--ma-gold);
+  color: #0b0c0f;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin-right: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.ma-muted:hover .ma-nav-avatar {
+  transform: scale(1.1);
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  bottom: 25px;
+  right: 25px;
+  background-color: #25d366;
+  color: #fff !important;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 24px;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1) rotate(5deg);
+  background-color: #128c7e;
+  box-shadow: 0 6px 20px rgba(18, 140, 126, 0.5);
+}
+
+@media (max-width: 768px) {
+  .whatsapp-float {
+    width: 42px;
+    height: 42px;
+    bottom: 20px;
+    right: 20px;
+    font-size: 20px;
   }
 }

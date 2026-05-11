@@ -37,7 +37,7 @@
           <span class="ma-sidebar-icon"><i class="fa-solid fa-envelope"></i></span>
           <span class="ma-sidebar-label">Contacts</span>
         </a>
-        <a class="nav-link" href="../index.html" data-bs-toggle="tooltip" data-bs-placement="right" title="Visit Website">
+        <a class="nav-link" href="../index" data-bs-toggle="tooltip" data-bs-placement="right" title="Visit Website" target="_blank">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
           <span class="ma-sidebar-label">View site</span>
         </a>

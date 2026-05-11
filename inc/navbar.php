@@ -1,6 +1,17 @@
  <?php
     $sqlCategories = "SELECT * FROM categories where status = 1";
     $resultCategories = mysqli_query($conn, $sqlCategories);
+
+    $cartCount = 0;
+    if (isLoggedIn()) {
+        $userId = $_SESSION['user']['id'] ?? $_SESSION['admin']['id'];
+        $sqlCartCount = "SELECT COUNT(id) as total FROM cart WHERE user_id = $userId";
+        $resCartCount = mysqli_query($conn, $sqlCartCount);
+        if ($resCartCount) {
+            $rowCartCount = mysqli_fetch_assoc($resCartCount);
+            $cartCount = $rowCartCount['total'] ?? 0;
+        }
+    }
     ?>
 
 
@@ -44,14 +55,46 @@
 
                      </ul>
                  </li>
-                 <li class="nav-item"><a class="nav-link ma-hover-underline" href="pages/login.html">Login</a></li>
-                 <li class="nav-item ms-lg-2 position-relative">
-                     <a class="btn btn-ma-outline btn-sm " href="cart">Cart</a>
-                     <span class="cart-count fw-bold">3</span>
-                 </li>
-                 <li class="nav-item ms-lg-2">
-                     <a class="btn btn-ma-outline btn-sm" href="pages/cart.html">Orders</a>
-                 </li>
+                  <?php if (isLoggedIn()): ?>
+                      <li class="nav-item mt-1 mt-lg-0">
+                          <a class="nav-link ma-muted d-flex align-items-center" href="<?php echo isAdminLoggedIn() ? 'admins/dashboard' : 'profile'; ?>">
+                              <?php 
+                                $fullName = isAdminLoggedIn() ? $_SESSION['admin']['name'] : $_SESSION['user']['name'];
+                                $words = explode(" ", trim($fullName));
+                                $initials = "";
+                                $count = 0;
+                                foreach ($words as $w) {
+                                    if (!empty($w) && $count < 2) {
+                                        $initials .= strtoupper(substr($w, 0, 1));
+                                        $count++;
+                                    }
+                                }
+                              ?>
+                              <div class="ma-nav-avatar"><?php echo $initials; ?></div>
+                              <?php 
+                                if (isAdminLoggedIn()) {
+                                    echo htmlspecialchars($_SESSION['admin']['name']) . ' (Admin)';
+                                } else {
+                                    echo htmlspecialchars($_SESSION['user']['name']);
+                                }
+                              ?>
+                          </a>
+                      </li>
+                      <li class="nav-item ms-lg-2 mt-2 mt-lg-0 position-relative">
+                          <a class="btn btn-ma-outline btn-sm w-100 w-lg-auto" href="cart">Cart</a>
+                          <span class="position-absolute translate-middle badge rounded-pill bg-danger js-cart-count custom-positioning"><?php echo $cartCount; ?></span>
+                      </li>
+                      <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                          <a class="btn btn-ma-outline btn-sm w-100 w-lg-auto js-logout" href="logout">Logout</a>
+                      </li>
+                  <?php else: ?>
+                      <li class="nav-item">
+                          <a class="nav-link ma-hover-underline <?php echo ($pageName == 'Login') ? 'active' : ''; ?>" href="login">Login</a>
+                      </li>
+                      <li class="nav-item ms-lg-2 mt-2 mt-lg-0 position-relative">
+                          <a class="btn btn-ma-outline btn-sm w-100 w-lg-auto js-guest-cart" href="login?redirect=cart">Cart</a>
+                      </li>
+                  <?php endif; ?>
              </ul>
          </div>
      </div>

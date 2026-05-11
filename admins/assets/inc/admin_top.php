@@ -1,6 +1,7 @@
 <?php
 require_once('./assets/inc/config.php');
 require_once('./assets/inc/functions.php');
+requireAdmin();
 
 // fetching page name
 $pageName = ucwords(str_replace("-", " ", basename($_SERVER['PHP_SELF'], ".php")));
