@@ -21,6 +21,10 @@
           <span class="ma-sidebar-icon"><i class="fa-solid fa-circle-info"></i></span>
           <span class="ma-sidebar-label">Product Details</span>
         </a>
+        <a class="nav-link <?php echo ($pageName == 'Product Feedback') ? "active" : ""; ?>" href="../admins/product-feedback" data-bs-toggle="tooltip" data-bs-placement="right"  title="Product Feedback">
+          <span class="ma-sidebar-icon"><i class="fa-solid fa-message"></i></span>
+          <span class="ma-sidebar-label">Product Feedback</span>
+        </a>
         <a class="nav-link <?php echo ($pageName == 'Orders') ? "active" : ""; ?>" href="../admins/orders" data-bs-toggle="tooltip" data-bs-placement="right"  title="Orders">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-truck"></i></span>
           <span class="ma-sidebar-label">Orders</span>
@@ -33,10 +37,10 @@
           <span class="ma-sidebar-icon"><i class="fa-solid fa-users"></i></span>
           <span class="ma-sidebar-label">Users</span>
         </a>
-        <a class="nav-link <?php echo ($pageName == 'Contacts') ? "active" : ""; ?>" href="../admins/contacts" data-bs-toggle="tooltip" data-bs-placement="right" title="Contacts">
+        <!-- <a class="nav-link <?php echo ($pageName == 'Contacts') ? "active" : ""; ?>" href="../admins/contacts" data-bs-toggle="tooltip" data-bs-placement="right" title="Contacts">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-envelope"></i></span>
           <span class="ma-sidebar-label">Contacts</span>
-        </a>
+        </a> -->
         <a class="nav-link" href="../index" data-bs-toggle="tooltip" data-bs-placement="right" title="Visit Website" target="_blank">
           <span class="ma-sidebar-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
           <span class="ma-sidebar-label">View site</span>

@@ -137,9 +137,12 @@ require_once('./assets/inc/admin_top.php');
                                         <td class="text-center">
                                             <div class="d-flex flex-column align-items-center gap-2">
                                                 <?php if (!empty($row['receipt_image']) && $row['receipt_image'] !== 'null'): ?>
-                                                    <a href="../assets/img/receipts/<?php echo $row['receipt_image']; ?>" target="_blank" title="View Full Receipt">
-                                                        <img src="../assets/img/receipts/<?php echo $row['receipt_image']; ?>" alt="Receipt" class="img-thumbnail" style="max-height: 40px; width: auto; object-fit: contain;">
-                                                    </a>
+                                                    <img src="../assets/img/receipts/<?php echo $row['receipt_image']; ?>" alt="Receipt"
+                                                         class="img-thumbnail js-receipt-thumb"
+                                                         data-receipt="../assets/img/receipts/<?php echo $row['receipt_image']; ?>"
+                                                         data-order-id="<?php echo $row['id']; ?>"
+                                                         style="max-height: 40px; width: auto; object-fit: contain; cursor: zoom-in;"
+                                                         title="Click to view receipt">
                                                 <?php else: ?>
                                                     <span class="ma-muted small">N/A</span>
                                                 <?php endif; ?>
@@ -258,6 +261,31 @@ require_once('./assets/inc/admin_top.php');
                 </div>
             </div>
 
+            <!-- Receipt Preview Modal -->
+            <div class="modal fade" id="receiptPreviewModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content ma-bg-surface border ma-border ma-rounded">
+                        <div class="modal-header border-0 pb-2">
+                            <h5 class="modal-title text-white d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-receipt" style="color: var(--ma-accent);"></i>
+                                Receipt — <span id="receiptModalOrderId" class="badge badge-trending rounded-pill ms-1"></span>
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center p-3" style="background: rgba(0,0,0,.25); border-radius: 0 0 var(--ma-radius) var(--ma-radius);">
+                            <img id="receiptModalImg" src="" alt="Receipt"
+                                 style="max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 6px; box-shadow: 0 4px 24px rgba(0,0,0,.5);">
+                        </div>
+                        <div class="modal-footer border-0 pt-2">
+                            <a id="receiptModalDownload" href="" target="_blank" class="btn btn-ma-outline btn-sm">
+                                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Open Full Size
+                            </a>
+                            <button class="btn btn-ma-ghost" data-bs-dismiss="modal" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <?php require_once('./assets/inc/admin_bottom.php'); ?>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -283,6 +311,18 @@ require_once('./assets/inc/admin_top.php');
                             const id = cancelBtn.dataset.id;
                             document.getElementById('cancelOrderIdText').textContent = 'ORD-' + id;
                             document.getElementById('confirmCancelOrderBtn').dataset.id = id;
+                        }
+
+                        // Receipt lightbox
+                        const receiptThumb = e.target.closest('.js-receipt-thumb');
+                        if (receiptThumb) {
+                            const src = receiptThumb.dataset.receipt;
+                            const orderId = receiptThumb.dataset.orderId;
+                            document.getElementById('receiptModalImg').src = src;
+                            document.getElementById('receiptModalOrderId').textContent = 'ORD-' + orderId;
+                            document.getElementById('receiptModalDownload').href = src;
+                            const modal = new bootstrap.Modal(document.getElementById('receiptPreviewModal'));
+                            modal.show();
                         }
                     });
 

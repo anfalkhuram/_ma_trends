@@ -143,3 +143,48 @@ $(document).on('submit', '#edit_product_form', function (e) {
 
     });
 });
+
+// Price and discount auto-calculations
+function setupPriceCalculators(formSelector) {
+    const form = $(formSelector);
+    const priceInput = form.find('input[name="price"]');
+    const oldPriceInput = form.find('input[name="old_price"]');
+    const discountInput = form.find('input[name="discount"]');
+
+    function calculateDiscount() {
+        let p = parseFloat(priceInput.val());
+        let op = parseFloat(oldPriceInput.val());
+        if (!isNaN(p) && !isNaN(op) && op > 0) {
+            let d = ((op - p) / op) * 100;
+            // if discount is negative, user can still see it, but we can just set it
+            discountInput.val(Math.round(d));
+        }
+    }
+
+    function calculatePrice() {
+        let d = parseFloat(discountInput.val());
+        let op = parseFloat(oldPriceInput.val());
+        if (!isNaN(d) && !isNaN(op) && op > 0) {
+            let p = op - (op * (d / 100));
+            priceInput.val(Math.round(p));
+        }
+    }
+
+    priceInput.on('input', calculateDiscount);
+    
+    discountInput.on('input', calculatePrice);
+    
+    oldPriceInput.on('input', function() {
+        // If price is already filled, update discount. Otherwise if discount is filled, update price.
+        if (priceInput.val() !== "") {
+            calculateDiscount();
+        } else if (discountInput.val() !== "") {
+            calculatePrice();
+        }
+    });
+}
+
+$(document).ready(function() {
+    setupPriceCalculators('#add_product_form');
+    setupPriceCalculators('#edit_product_form');
+});

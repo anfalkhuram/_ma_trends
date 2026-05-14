@@ -16,8 +16,10 @@ $loginError = '';
 $registerError = '';
 $registerSuccess = '';
 
-// Capture the return URL (e.g. ?redirect=cart)
-$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '';
+// Capture and WHITELIST the return URL to prevent open redirect
+$allowedRedirects = ['cart', 'checkout', 'index', 'shop', 'profile', 'products'];
+$rawRedirect = isset($_GET['redirect']) ? $_GET['redirect'] : '';
+$redirect = in_array($rawRedirect, $allowedRedirects) ? $rawRedirect : '';
 
 // If already logged in, bounce away
 if (isLoggedIn()) {
@@ -49,10 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user = mysqli_fetch_assoc($resultUser);
 
                 if (password_verify($password, $user['password'])) {
+                    session_regenerate_id(true); // prevent session fixation
                     if ($user['status'] == 'admin') {
                         $_SESSION['admin'] = [
-                            'id' => $user['id'],
-                            'name' => $user['name'],
+                            'id'    => $user['id'],
+                            'name'  => $user['name'],
                             'email' => $user['email']
                         ];
                         session_write_close();
@@ -60,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit();
                     } else {
                         $_SESSION['user'] = [
-                            'id' => $user['id'],
-                            'name' => $user['name'],
+                            'id'    => $user['id'],
+                            'name'  => $user['name'],
                             'email' => $user['email']
                         ];
                         $goto = $redirect ? $redirect : 'index';
@@ -70,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit();
                     }
                 } else {
-                    $loginError = 'Incorrect password.';
+                    $loginError = 'Incorrect email or password.';
                 }
             } else {
-                $loginError = 'No account found with that email.';
+                $loginError = 'Incorrect email or password.';
             }
         }
     }

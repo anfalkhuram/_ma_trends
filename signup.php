@@ -13,7 +13,10 @@ require_once('inc/top.php');
 
 // --- Handle POST (register) ---
 $registerError = '';
-$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '';
+// Whitelist redirect to prevent open redirect attacks
+$allowedRedirects = ['cart', 'checkout', 'index', 'shop', 'profile', 'products'];
+$rawRedirect = isset($_GET['redirect']) ? $_GET['redirect'] : '';
+$redirect = in_array($rawRedirect, $allowedRedirects) ? $rawRedirect : '';
 
 // If already logged in, bounce away
 if (isLoggedIn()) {
@@ -34,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $registerError = 'Please fill in all fields.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $registerError = 'Please enter a valid email address.';
-        } elseif (strlen($password) < 6) {
-            $registerError = 'Password must be at least 6 characters.';
+        } elseif (strlen($password) < 8) {
+            $registerError = 'Password must be at least 8 characters.';
         } elseif ($password !== $confirm) {
             $registerError = 'Passwords do not match.';
         } else {

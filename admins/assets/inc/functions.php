@@ -29,3 +29,27 @@ function getTotalByStatus($conn, $table, $status)
     $data = mysqli_fetch_assoc($result);
     return $data['total'];
 }
+
+function getTotalByLabel($conn, $table, $label)
+{
+    $sql = "SELECT COUNT(*) AS total FROM $table WHERE label='$label'";
+    $result = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_assoc($result);
+    return $data['total'];
+
+}
+
+
+function getTotalByConfirmation($conn, $table, $confirmation){
+    $sql = "SELECT COUNT(*) AS total FROM $table WHERE order_confirmation='$confirmation'";
+    $result = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_assoc($result);
+    return $data['total'];
+}
+
+function getTotalByRole($conn, $table, $status){
+    $sql = "SELECT COUNT(*) AS total FROM $table WHERE status='$status'";
+    $result = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_assoc($result);
+    return $data['total'];
+}

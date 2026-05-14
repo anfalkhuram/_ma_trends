@@ -10,7 +10,7 @@ if (!isLoggedIn()) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productId = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-    $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
+    $quantity  = isset($_POST['quantity'])   ? max(1, min(99, intval($_POST['quantity']))) : 1;
     $userId = $_SESSION['user']['id'] ?? $_SESSION['admin']['id'];
 
     if ($productId <= 0 || $quantity <= 0) {
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         echo json_encode(['success' => true, 'message' => 'Product added to cart!', 'cart_count' => $newTotal]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Database error: ' . mysqli_error($conn)]);
+        echo json_encode(['success' => false, 'message' => 'Could not add to cart. Please try again.']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method.']);

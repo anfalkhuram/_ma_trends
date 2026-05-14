@@ -15,12 +15,12 @@
     ?>
 
 
- <nav class="navbar navbar-expand-lg fixed-top ma-navbar">
+ <nav class="navbar navbar-expand-lg navbar-dark fixed-top ma-navbar">
      <div class="container">
          <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-             <span class="ma-pill color-soft-gold fs-4"><img src="assets/img/ma_trends_ill.png" alt="logo..." width="40"> <span class="h5">Trends</span></span>
+             <span class="ma-pill color-soft-gold fs-4"><img src="assets/img/ma_trends_ill.png" alt="logo..." width="40"> <span class="ma-trends-logo-text">Trends</span></span>
 
-             <span class="d-none d-md-inline ma-muted fw-semibold mt-3" style="letter-spacing:.06em;">What&rsquo;s Trending
+             <span class="d-none d-md-inline ma-muted fw-semibold mt-3">What&rsquo;s Trending
                  Now</span>
          </a>
          <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"

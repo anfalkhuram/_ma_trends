@@ -97,6 +97,12 @@ require_once('inc/top.php')
                                     <img src="./assets/img/JazzCash.png" alt="jazzCash" width="120" class="bg-light p-3 rounded"/>
                                 </label>
                             </div>
+                            <div class="form-check mt-3">
+                                <input class="form-check-input mt-2" type="radio" name="paymentMethod" value="bank_transfer" id="pay4" />
+                                <label class="form-check-label ma-muted fw-bold d-flex align-items-center" for="pay4" style="height: 38px;">
+                                    <i class="fas fa-university me-2 fs-4"></i> Bank Transfer
+                                </label>
+                            </div>
                         </div>
                        
                         
@@ -157,8 +163,9 @@ require_once('inc/top.php')
                 <div class="modal-body ma-muted">
                     <p>Please send the payment to the following account:</p>
                     <div class="bg-dark p-3 rounded mb-3 border ma-border">
-                        <p class="mb-1 text-white">Account Title: <strong>MATrends Store</strong></p>
+                        <p class="mb-1 text-white">Account Title: <strong id="paymentAccountTitle">MATrends Store</strong></p>
                         <p class="mb-1 text-white">Account Number: <strong id="paymentAccountNumber">03001234567</strong></p>
+                        <p class="mb-1 text-white" id="paymentBankWrapper" style="display: none;">Bank: <strong id="paymentBankName"></strong></p>
                     </div>
                     <p>After sending the payment, please upload a screenshot of the transaction receipt.</p>
                     <div class="mb-3">
@@ -250,16 +257,29 @@ require_once('inc/top.php')
                     return;
                 }
 
-                if (selectedPayment.value === 'easypaisa' || selectedPayment.value === 'jazzcash') {
+                if (selectedPayment.value === 'easypaisa' || selectedPayment.value === 'jazzcash' || selectedPayment.value === 'bank_transfer') {
                     const accNum = document.getElementById('paymentAccountNumber');
+                    const accTitle = document.getElementById('paymentAccountTitle');
+                    const bankWrap = document.getElementById('paymentBankWrapper');
+                    const bankName = document.getElementById('paymentBankName');
                     const title = document.getElementById('paymentModalTitle');
                     
                     if (selectedPayment.value === 'easypaisa') {
                         title.textContent = 'Easypaisa Payment Details';
-                        accNum.textContent = '0345-1234567 (Easypaisa)';
-                    } else {
+                        accTitle.textContent = 'Muhammed Ahmed';
+                        accNum.textContent = '03171417715';
+                        bankWrap.style.display = 'none';
+                    } else if (selectedPayment.value === 'jazzcash') {
                         title.textContent = 'JazzCash Payment Details';
-                        accNum.textContent = '0300-1234567 (JazzCash)';
+                        accTitle.textContent = 'Kaneez Bibi';
+                        accNum.textContent = '03097886931';
+                        bankWrap.style.display = 'none';
+                    } else if (selectedPayment.value === 'bank_transfer') {
+                        title.textContent = 'Bank Transfer Details';
+                        accTitle.textContent = 'Muhammad Ahmad Asan Account';
+                        accNum.textContent = '1791006506620001';
+                        bankName.textContent = 'MCB Islamic';
+                        bankWrap.style.display = 'block';
                     }
                     paymentDetailsModal.show();
                 } else if (selectedPayment.value === 'cod') {

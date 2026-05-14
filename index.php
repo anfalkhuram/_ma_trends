@@ -24,29 +24,52 @@ require_once('inc/top.php');
     <!-- Hero -->
     <header class="ma-hero">
         <div class="container">
-            <div class="row g-4 align-items-stretch ma-hero-card ma-shadow">
-                <div class="col-lg-6 custom-padding-margin">
-                    <div class="ma-hero-art h-100 d-flex align-items-end p-4 p-md-5">
-
+            <div class="ma-hero-card ma-shadow">
+                <!-- Shimmer accent line -->
+                <div class="ma-hero-shimmer"></div>
+                <div class="row g-0 align-items-stretch">
+                    <div class="col-lg-6 ma-hero-img-col">
+                        <div class="ma-hero-art h-100">
+                            <picture>
+                                <source media="(max-width: 991px)" srcset="assets/img/hero-image-small.jpeg">
+                                <img src="assets/img/hero-image.jpeg" alt="MA Trends — Premium Accessories Collection" class="ma-hero-img" loading="eager">
+                            </picture>
+                            <!-- Luxury overlay -->
+                            <div class="ma-hero-img-overlay"></div>
+                            <!-- Floating brand watermark on image -->
+                            <div class="ma-hero-watermark">MA</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center">
+                        <div class="ma-hero-content">
+                            <div class="ma-kicker mb-3">
+                                <span class="ma-kicker-diamond">◆</span> MA Trends
+                            </div>
+                            <h1 class="ma-hero-headline">Discover What's<br><span class="ma-gold-text">Trending Now</span></h1>
+                            <p class="lead ma-muted mb-4">
+                                Premium looks, everyday prices. Curated accessories for men, women, and unisex style.
+                            </p>
+                            <div class="d-flex flex-wrap gap-3">
+                                <a class="btn btn-ma btn-ma-hero" href="shop">
+                                    <span>Shop Trending</span>
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                                <a class="btn btn-ma-outline btn-ma-hero" href="shop">Explore All</a>
+                            </div>
+                            <div class="ma-hero-badges">
+                                <span class="badge badge-trending rounded-pill px-3 py-2">
+                                    <i class="fas fa-fire-alt me-1"></i>Trending highlights
+                                </span>
+                                <span class="badge badge-newdrop rounded-pill px-3 py-2">
+                                    <i class="fas fa-bolt me-1"></i>New drops weekly
+                                </span>
+                                <span class="badge badge-ma rounded-pill px-3 py-2">
+                                    <i class="fas fa-shipping-fast me-1"></i>Fast delivery
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 p-4 p-md-5">
-                    <div class="ma-kicker mb-3">MA Trends</div>
-                    <h1 class="display-5 fw-bold mb-3">Discover What’s Trending Now</h1>
-                    <p class="lead ma-muted mb-4">
-                        Premium looks, everyday prices. Curated accessories for men, women, and unisex style.
-                    </p>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a class="btn btn-ma" href="shop">Shop Trending</a>
-                        <a class="btn btn-ma-outline" href="shop">Explore All</a>
-                    </div>
-                    <div class="d-flex flex-wrap gap-2 mt-4">
-                        <span class="badge badge-trending rounded-pill px-3 py-2">Trending highlights</span>
-                        <span class="badge badge-newdrop rounded-pill px-3 py-2">New drops weekly</span>
-                        <span class="badge badge-ma rounded-pill px-3 py-2">Fast delivery</span>
-                    </div>
-                </div>
-
             </div>
         </div>
     </header>
@@ -158,48 +181,60 @@ require_once('inc/top.php');
     <!-- Couple Collection -->
     <section class="ma-section">
         <div class="container">
-            <div class="row g-4 align-items-stretch">
-                <div class="col-lg-7">
-                    <div class="ma-card p-4 p-md-5 h-100">
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                            <div>
-                                <div class="ma-kicker mb-2">Couple Collection</div>
-                                <h2 class="h3 fw-bold mb-2">Match energy, not just outfits.</h2>
-                                <p class="ma-muted mb-4">Coordinated accessories designed to feel personal, modern, and effortless.</p>
-                            </div>
-                            <span class="badge badge-trending rounded-pill px-3 py-2">Trending highlight</span>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="ma-card p-3 h-100">
-                                    <div class="fw-semibold">“His & Hers” Chains</div>
-                                    <div class="ma-muted small">Minimal metal, premium feel</div>
-                                    <div class="mt-3 d-flex gap-2">
-                                        <span class="badge badge-ma rounded-pill">Unisex</span>
-                                        <span class="badge badge-trending rounded-pill">🔥</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="ma-card p-3 h-100">
-                                    <div class="fw-semibold">Matched Watch Set</div>
-                                    <div class="ma-muted small">Clean dial + comfort strap</div>
-                                    <div class="mt-3 d-flex gap-2">
-                                        <span class="badge badge-ma rounded-pill">Couple</span>
-                                        <span class="badge badge-newdrop rounded-pill">New Drop</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <a class="btn btn-ma" href="category-couple-collection">Explore Couple Collection</a>
+            <div class="ma-couple-card ma-shadow">
+                <div class="ma-couple-shimmer"></div>
+                <div class="row g-0 align-items-stretch">
+                    <!-- Image Column (Right on desktop, Top on mobile) -->
+                    <div class="col-lg-6 order-lg-2 ma-couple-img-col">
+                        <div class="ma-couple-art h-100">
+                            <picture>
+                                <source media="(max-width: 991px)" srcset="assets/img/couple-collection-small.jpeg">
+                                <img src="assets/img/couple-collection.jpeg" alt="Couple Collection" class="ma-couple-img" loading="lazy">
+                            </picture>
+                            <div class="ma-couple-img-overlay"></div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="ma-card h-100 overflow-hidden">
-                        <img src="assets/img/couple-image.png" alt="Couple collection" class="w-100 h-100"
-                            style="object-fit:cover; min-height: 340px;" />
+                    <!-- Content Column (Left on desktop, Bottom on mobile) -->
+                    <div class="col-lg-6 order-lg-1 d-flex align-items-center">
+                        <div class="ma-couple-content">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <div class="ma-kicker">
+                                    <span class="ma-kicker-diamond">◆</span> Couple Collection
+                                </div>
+                                <span class="badge badge-trending rounded-pill px-3 py-2"><i class="fas fa-fire-alt me-1"></i>Trending highlight</span>
+                            </div>
+                            <h2 class="ma-couple-headline mb-3">Match energy,<br><span class="ma-gold-text">not just outfits.</span></h2>
+                            <p class="lead ma-muted mb-4">Coordinated accessories designed to feel personal, modern, and effortless.</p>
+                            
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="ma-couple-inner-card p-3 h-100">
+                                        <div class="fw-semibold text-white">“His & Hers” Chains</div>
+                                        <div class="ma-muted small">Minimal metal, premium feel</div>
+                                        <div class="mt-3 d-flex gap-2">
+                                            <span class="badge badge-ma rounded-pill">Unisex</span>
+                                            <span class="badge badge-trending rounded-pill">🔥</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ma-couple-inner-card p-3 h-100">
+                                        <div class="fw-semibold text-white">Matched Watch Set</div>
+                                        <div class="ma-muted small">Clean dial + comfort strap</div>
+                                        <div class="mt-3 d-flex gap-2">
+                                            <span class="badge badge-ma rounded-pill">Couple</span>
+                                            <span class="badge badge-newdrop rounded-pill">New Drop</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a class="btn btn-ma btn-ma-hero" href="category-couple-collection">
+                                    <span>Explore Couple Collection</span>
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

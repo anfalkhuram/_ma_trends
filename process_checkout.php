@@ -1,12 +1,9 @@
 <?php
 ob_start();
-error_reporting(E_ALL);
+error_reporting(0);
 
 function respond($data) {
     $out = ob_get_clean();
-    if (!empty($out)) {
-        $data['debug_output'] = $out;
-    }
     header('Content-Type: application/json');
     echo json_encode($data);
     exit();
@@ -14,8 +11,8 @@ function respond($data) {
 
 register_shutdown_function(function() {
     $error = error_get_last();
-    if ($error && ($error['type'] === E_ERROR || $error['type'] === E_PARSE || $error['type'] === E_CORE_ERROR || $error['type'] === E_COMPILE_ERROR)) {
-        respond(['success' => false, 'message' => 'PHP Fatal Error: ' . $error['message'] . ' in ' . $error['file'] . ' on line ' . $error['line']]);
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        respond(['success' => false, 'message' => 'Something went wrong. Please try again.']);
     }
 });
 
@@ -28,43 +25,9 @@ try {
 
     $userId = $_SESSION['user']['id'] ?? $_SESSION['admin']['id'] ?? 0;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 1. Ensure tables exist
-    $createOrdersTable = "CREATE TABLE IF NOT EXISTS orders (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        name VARCHAR(255) NOT NULL,
-        phone VARCHAR(50) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        address TEXT NOT NULL,
-        city VARCHAR(100) NOT NULL,
-        region VARCHAR(100) NOT NULL,
-        postalcode VARCHAR(50) NOT NULL,
-        total DECIMAL(10, 2) NOT NULL,
-        payment_method VARCHAR(50) NOT NULL,
-        shipping DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-        receipt_image VARCHAR(255) DEFAULT NULL,
-        status INT NOT NULL DEFAULT 0,
-        order_confirmation INT NOT NULL DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )";
-    mysqli_query($conn, $createOrdersTable);
-
-    $createOrderDetailsTable = "CREATE TABLE IF NOT EXISTS order_details (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        order_id INT NOT NULL,
-        product_id INT NOT NULL,
-        product_name VARCHAR(255) NOT NULL,
-        qty INT NOT NULL,
-        sub_total DECIMAL(10, 2) NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )";
-    mysqli_query($conn, $createOrderDetailsTable);
-
-    // 2. Validate Cart is not empty
-    $sqlCart = "SELECT c.*, p.name as product_name FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = $userId";
-    $resCart = mysqli_query($conn, $sqlCart);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $sqlCart = "SELECT c.*, p.name as product_name FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = $userId";
+        $resCart = mysqli_query($conn, $sqlCart);
     if (!$resCart || mysqli_num_rows($resCart) === 0) {
         respond(['success' => false, 'message' => 'Your cart is empty.']);
     }
@@ -94,31 +57,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $shippingCost = 0.00; // Currently free delivery based on frontend
     $total += $shippingCost;
 
-    // 4. Handle File Upload (if Easypaisa or Jazzcash)
+    // 4. Handle File Upload (if Easypaisa, Jazzcash, or Bank Transfer)
     $receiptImageName = null;
-    if ($paymentMethod === 'easypaisa' || $paymentMethod === 'jazzcash') {
+    if ($paymentMethod === 'easypaisa' || $paymentMethod === 'jazzcash' || $paymentMethod === 'bank_transfer') {
         if (!isset($_FILES['paymentScreenshot']) || $_FILES['paymentScreenshot']['error'] !== UPLOAD_ERR_OK) {
             respond(['success' => false, 'message' => 'Please upload a valid receipt screenshot.']);
         }
 
+        // Verify real MIME type — do NOT trust the extension
+        $finfo    = finfo_open(FILEINFO_MIME_TYPE);
+        $realMime = finfo_file($finfo, $_FILES['paymentScreenshot']['tmp_name']);
+        finfo_close($finfo);
+
+        $allowedMimes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
+        if (!isset($allowedMimes[$realMime])) {
+            respond(['success' => false, 'message' => 'Only image files (JPG, PNG, GIF, WEBP) are allowed.']);
+        }
+
         $uploadDir = 'assets/img/receipts/';
         if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+            mkdir($uploadDir, 0755, true);
         }
 
-        $fileName = time() . '_' . basename($_FILES['paymentScreenshot']['name']);
+        // Random filename — never use the original filename
+        $ext      = $allowedMimes[$realMime];
+        $fileName = bin2hex(random_bytes(16)) . '.' . $ext;
         $targetFilePath = $uploadDir . $fileName;
-        
-        $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
-        $allowedTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
-        if (!in_array($fileType, $allowedTypes)) {
-            respond(['success' => false, 'message' => 'Only JPG, JPEG, PNG, GIF, & WEBP files are allowed.']);
-        }
 
-        if (move_uploaded_file($_FILES["paymentScreenshot"]["tmp_name"], $targetFilePath)) {
+        if (move_uploaded_file($_FILES['paymentScreenshot']['tmp_name'], $targetFilePath)) {
             $receiptImageName = $fileName;
         } else {
-            respond(['success' => false, 'message' => 'Sorry, there was an error uploading your receipt.']);
+            respond(['success' => false, 'message' => 'Error uploading receipt. Please try again.']);
         }
     }
 
@@ -133,35 +102,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 6. Insert into order_details and delete from cart
         $successDetails = true;
         foreach ($cartItems as $item) {
-            $prodId = $item['product_id'];
+            $prodId   = (int)$item['product_id'];
             $prodName = mysqli_real_escape_string($conn, $item['product_name']);
-            $qty = $item['quantity'];
-            $subTotal = $item['sub_total'];
+            $qty      = (int)$item['quantity'];
+            $subTotal = (float)$item['sub_total'];
 
-            $sqlInsertDetail = "INSERT INTO order_details (user_id, order_id, product_id, product_name, qty, sub_total, created_at) 
+            $sqlInsertDetail = "INSERT INTO order_details (user_id, order_id, product_id, product_name, qty, sub_total, created_at)
                                 VALUES ($userId, $orderId, $prodId, '$prodName', $qty, $subTotal, NOW())";
-            
             if (!mysqli_query($conn, $sqlInsertDetail)) {
                 $successDetails = false;
             }
         }
 
         if ($successDetails) {
-            // Clear the cart
             mysqli_query($conn, "DELETE FROM cart WHERE user_id = $userId");
             respond(['success' => true, 'message' => 'Order placed successfully.']);
         } else {
-            respond(['success' => false, 'message' => 'Order placed, but some details failed to save.']);
+            respond(['success' => false, 'message' => 'Order placed but some items failed to save. Contact support.']);
         }
-
     } else {
-        respond(['success' => false, 'message' => 'Database error while placing order: ' . mysqli_error($conn)]);
+        respond(['success' => false, 'message' => 'Could not place your order. Please try again.']);
     }
 } else {
     respond(['success' => false, 'message' => 'Invalid request.']);
 }
 
 } catch (\Throwable $e) {
-    respond(['success' => false, 'message' => 'Exception: ' . $e->getMessage()]);
+    respond(['success' => false, 'message' => 'Something went wrong. Please try again.']);
 }
 ?>

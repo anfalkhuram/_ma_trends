@@ -1,6 +1,11 @@
 <?php
 require_once("inc/config.php");
-$productId = isset($_GET['id']) ? $_GET['id'] : null;
+$productId = isset($_GET['id']) ? (int)$_GET['id'] : null;
+
+// Session helpers for the review section
+$isUserLoggedIn = isset($_SESSION['user']['id']) && !empty($_SESSION['user']['id']);
+$loggedUserName = $isUserLoggedIn ? htmlspecialchars($_SESSION['user']['name']) : '';
+$loggedUserId   = $isUserLoggedIn ? (int)$_SESSION['user']['id'] : 0;
 if ($productId) {
     $sqlProduct = "SELECT * FROM products WHERE id = $productId";
     $resultProduct = mysqli_query($conn, $sqlProduct);
@@ -120,11 +125,14 @@ require_once('inc/top.php');
                             <span class="badge badge-ma rounded-pill">Save <?php echo $rowProduct['discount']; ?>%</span>
                         </div>
 
-                        <p class="ma-muted mt-3 mb-4">
-                            <?php
-                            echo html_entity_decode($rowProduct['description']);
-                            ?>
-                        </p>
+                        <div class="mt-3 mb-4">
+                            <div class="ma-muted" id="product-description" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <?php
+                                echo html_entity_decode($rowProduct['description']);
+                                ?>
+                            </div>
+                            <a href="javascript:void(0)" id="read-more-btn" class="text-decoration-none small fw-bold mt-1" style="display: none; color: #bda379;">...Read more</a>
+                        </div>
 
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -142,7 +150,7 @@ require_once('inc/top.php');
                                 <input class="form-control js-qty text-center" value="1" style="max-width: 90px;" />
                                 <button class="btn btn-ma-outline js-qty-plus" type="button" aria-label="Increase">+</button>
                             </div>
-                                <button class="btn btn-ma flex-grow-1 flex-md-grow-0 mt-2 mt-md-0 mt-lg-0 js-add-to-cart" data-product-id="<?php echo $productId; ?>">Add to Cart</button>
+                            <button class="btn btn-ma flex-grow-1 flex-md-grow-0 mt-2 mt-md-0 mt-lg-0 js-add-to-cart" data-product-id="<?php echo $productId; ?>">Add to Cart</button>
                         </div>
 
                         <hr class="border ma-border my-4" />
@@ -160,6 +168,114 @@ require_once('inc/top.php');
                     </div>
                 </div>
             </div>
+
+            <!-- Reviews -->
+            <?php
+            // Fetch approved reviews
+            $sqlReviews = "SELECT * FROM product_feedback WHERE product_id = $productId AND status = 1 ORDER BY created_at DESC";
+            $resReviews = mysqli_query($conn, $sqlReviews);
+            $reviews    = [];
+            if ($resReviews && mysqli_num_rows($resReviews) > 0) {
+                while ($r = mysqli_fetch_assoc($resReviews)) {
+                    $reviews[] = $r;
+                }
+            }
+            // Average from approved reviews
+            $avgRes = mysqli_query($conn, "SELECT ROUND(AVG(rating),1) AS avg FROM product_feedback WHERE product_id = $productId AND status = 1");
+            $avgRow = mysqli_fetch_assoc($avgRes);
+            $avgRating = $avgRow['avg'] ?? 0;
+
+            // Check if current user already reviewed
+            $alreadyReviewed = false;
+            if ($isUserLoggedIn) {
+                $chkRes = mysqli_query($conn, "SELECT id FROM product_feedback WHERE user_id = $loggedUserId AND product_id = $productId LIMIT 1");
+                $alreadyReviewed = $chkRes && mysqli_num_rows($chkRes) > 0;
+            }
+            ?>
+            <section class="ma-section pb-0">
+                <div class="row g-4">
+                    <!-- Reviews List -->
+                    <div class="col-lg-7">
+                        <div class="ma-card p-4">
+                            <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                                <h2 class="h4 fw-bold mb-0">Reviews &amp; Ratings</h2>
+                                <?php if ($avgRating > 0): ?>
+                                    <span class="badge badge-ma rounded-pill"><?php echo $avgRating; ?> / 5</span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="d-flex flex-column gap-3" id="js-reviews-list">
+                                <?php if (!empty($reviews)): ?>
+                                    <?php foreach ($reviews as $rev): ?>
+                                        <?php
+                                        $stars = '';
+                                        for ($s = 1; $s <= 5; $s++) {
+                                            $stars .= $s <= $rev['rating'] ? '★' : '☆';
+                                        }
+                                        ?>
+                                        <div class="ma-card p-3">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div class="fw-semibold text-capitalize"><?php echo htmlspecialchars($rev['name']); ?></div>
+                                                <div class="ma-muted" style="letter-spacing:2px;"><?php echo $stars; ?></div>
+                                            </div>
+                                            <div class="ma-muted small mt-1"><?php echo htmlspecialchars($rev['feedback']); ?></div>
+                                            <div class="ma-muted" style="font-size:0.72rem; margin-top:4px;"><?php echo date('M d, Y', strtotime($rev['created_at'])); ?></div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="ma-muted small text-center py-3" id="js-no-reviews-msg">No reviews yet. Be the first to review this product!</div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Form / Guest Prompt -->
+                    <div class="col-lg-5">
+                        <div class="ma-card p-4">
+                            <?php if ($isUserLoggedIn && !$alreadyReviewed): ?>
+                                <!-- Logged-in: show form -->
+                                <h3 class="h5 fw-bold">Write a Review</h3>
+                                <form id="js-review-form" novalidate>
+                                    <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
+                                    <div class="mb-3">
+                                        <label class="form-label ma-muted">Name</label>
+                                        <input class="form-control" name="name" value="<?php echo $loggedUserName; ?>" readonly style="opacity:.7; cursor:not-allowed;" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label ma-muted">Rating</label>
+                                        <select class="form-select" name="rating" required>
+                                            <option value="5" selected>★★★★★ &nbsp;5 Stars</option>
+                                            <option value="4">★★★★☆ &nbsp;4 Stars</option>
+                                            <option value="3">★★★☆☆ &nbsp;3 Stars</option>
+                                            <option value="2">★★☆☆☆ &nbsp;2 Stars</option>
+                                            <option value="1">★☆☆☆☆ &nbsp;1 Star</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label ma-muted">Comment</label>
+                                        <textarea class="form-control" name="feedback" rows="4" placeholder="Share your experience..." required></textarea>
+                                    </div>
+                                    <button class="btn btn-ma w-100" type="submit" id="js-review-submit-btn">Submit Review</button>
+                                </form>
+                            <?php elseif ($isUserLoggedIn && $alreadyReviewed): ?>
+                                <!-- Already reviewed -->
+                                <div class="text-center py-3">
+                                    <div style="font-size:2.5rem;">✅</div>
+                                    <div class="fw-semibold mt-2">You've already reviewed this product.</div>
+                                    <div class="ma-muted small mt-1">Your review is pending approval and will appear shortly.</div>
+                                </div>
+                            <?php else: ?>
+                                <!-- Guest: show login prompt -->
+                                <div class="text-center py-3">
+                                    <div style="font-size:2.5rem;">🔒</div>
+                                    <h3 class="h5 fw-bold mt-3">Login to Write a Review</h3>
+                                    <p class="ma-muted small">Share your experience with other shoppers by logging into your account.</p>
+                                    <a href="login?redirect=products%3Fid%3D<?php echo $productId; ?>" class="btn btn-ma w-100">Login to Review</a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
 
 
@@ -236,21 +352,94 @@ require_once('inc/top.php');
 
 
 
-    <!-- UI-only confirmation modal -->
-    <div class="modal fade" id="uiOnlyModal" tabindex="-1" aria-hidden="true">
+    <!-- Review Response Modal -->
+    <div class="modal fade" id="reviewResponseModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ma-bg-surface border ma-border ma-rounded">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title">Saved (UI only)</h5>
+                    <h5 class="modal-title text-white" id="reviewModalTitle">Review Submitted</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body ma-muted">This is a front-end demo. Hook this to your backend later.</div>
+                <div class="modal-body ma-muted" id="reviewModalBody"></div>
                 <div class="modal-footer border-0">
                     <button class="btn btn-ma" data-bs-dismiss="modal" type="button">OK</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+    (function() {
+        // Description Read More Logic
+        const desc = document.getElementById('product-description');
+        const readMoreBtn = document.getElementById('read-more-btn');
+        if (desc && readMoreBtn) {
+            // Check if text overflows
+            if (desc.scrollHeight > desc.clientHeight) {
+                readMoreBtn.style.display = 'inline-block';
+            }
+
+            readMoreBtn.addEventListener('click', function() {
+                if (desc.style.webkitLineClamp === '2') {
+                    desc.style.webkitLineClamp = 'unset';
+                    readMoreBtn.innerText = 'Show less';
+                } else {
+                    desc.style.webkitLineClamp = '2';
+                    readMoreBtn.innerText = '...Read more';
+                }
+            });
+        }
+
+        const reviewForm = document.getElementById('js-review-form');
+        if (!reviewForm) return;
+
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('js-review-submit-btn');
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = 'Submitting...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(reviewForm);
+
+            fetch('handlers/submit_review.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+
+                document.getElementById('reviewModalTitle').textContent = data.success ? '🎉 Review Submitted' : '⚠️ Could Not Submit';
+                document.getElementById('reviewModalBody').textContent  = data.message;
+
+                const modal = new bootstrap.Modal(document.getElementById('reviewResponseModal'));
+                modal.show();
+
+                if (data.success) {
+                    reviewForm.reset();
+                    // Disable submit to prevent double submission
+                    submitBtn.innerText  = 'Review Submitted ✓';
+                    submitBtn.disabled   = true;
+
+                    // Remove "no reviews" placeholder if present
+                    const noMsg = document.getElementById('js-no-reviews-msg');
+                    if (noMsg) noMsg.remove();
+                }
+            })
+            .catch(() => {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled  = false;
+                document.getElementById('reviewModalTitle').textContent = '⚠️ Network Error';
+                document.getElementById('reviewModalBody').textContent  = 'A network error occurred. Please try again.';
+                const modal = new bootstrap.Modal(document.getElementById('reviewResponseModal'));
+                modal.show();
+            });
+        });
+    })();
+    </script>
 
     <?php
     require_once('inc/footer.php');
@@ -259,7 +448,7 @@ require_once('inc/top.php');
     <?php
     require_once('inc/bottom.php');
     ?>
-  
+
 </body>
 
 </html>
