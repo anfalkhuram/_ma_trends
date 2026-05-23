@@ -138,48 +138,60 @@ require_once('./assets/inc/admin_top.php');
 
                                         $searchStr = $row['name'] . ' ' . $row['product_name'];
                                 ?>
-                                    <tr class="js-admin-row"
-                                        data-sr="<?php echo $sr; ?>"
-                                        data-id="<?php echo $row['id']; ?>"
-                                        data-name="<?php echo htmlspecialchars($searchStr); ?>">
-                                        <td><?php echo $sr; ?></td>
-                                        <td>FB-<?php echo $row['id']; ?></td>
-                                        <td class="text-capitalize"><?php echo htmlspecialchars($row['name']); ?></td>
-                                        <td class="text-capitalize"><?php echo htmlspecialchars($row['product_name'] ?? 'N/A'); ?></td>
-                                        <td style="letter-spacing: 2px; color: var(--ma-accent);"><?php echo $stars; ?></td>
-                                        <td class="ma-muted small" style="max-width: 260px; white-space: normal;"
-                                            title="<?php echo htmlspecialchars($row['feedback']); ?>">
-                                            <?php echo htmlspecialchars($feedbackDisplay); ?>
-                                        </td>
-                                        <td>
-                                            <?php if ($row['status'] == 1): ?>
-                                                <button class="badge rounded-pill px-3 py-1 border-0 badge-trending js-toggle-status"
+                                        <tr class="js-admin-row"
+                                            data-sr="<?php echo $sr; ?>"
+                                            data-id="<?php echo $row['id']; ?>"
+                                            data-name="<?php echo htmlspecialchars($searchStr); ?>">
+                                            <td><?php echo $sr; ?></td>
+                                            <td>FB-<?php echo $row['id']; ?></td>
+                                            <td class="text-capitalize"><?php echo htmlspecialchars($row['name']); ?></td>
+                                            <td class="text-capitalize"><?php echo htmlspecialchars($row['product_name'] ?? 'N/A'); ?></td>
+                                            <td style="letter-spacing: 2px; color: var(--ma-accent);"><?php echo $stars; ?></td>
+                                            <td class="ma-muted small" style="max-width: 260px; white-space: normal;">
+                                                <span
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="right"
+                                                    title="<?php echo htmlspecialchars($row['feedback'], ENT_QUOTES, 'UTF-8'); ?>">
+                                                    <?php
+                                                    $shortText = mb_substr($row['feedback'], 0, 7);
+
+                                                    echo htmlspecialchars(
+                                                        $shortText . (mb_strlen($row['feedback']) > 7 ? '...' : ''),
+                                                        ENT_QUOTES,
+                                                        'UTF-8'
+                                                    );
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <?php if ($row['status'] == 1): ?>
+                                                    <button class="badge rounded-pill px-3 py-1 border-0 badge-trending js-toggle-status"
                                                         data-id="<?php echo $row['id']; ?>"
                                                         data-product-id="<?php echo $row['product_id']; ?>"
                                                         data-current-status="1"
                                                         title="Click to hide this review">
-                                                    Visible
-                                                </button>
-                                            <?php else: ?>
-                                                <button class="badge rounded-pill px-3 py-1 border-0 badge-ma js-toggle-status"
+                                                        Visible
+                                                    </button>
+                                                <?php else: ?>
+                                                    <button class="badge rounded-pill px-3 py-1 border-0 badge-ma js-toggle-status"
                                                         data-id="<?php echo $row['id']; ?>"
                                                         data-product-id="<?php echo $row['product_id']; ?>"
                                                         data-current-status="0"
                                                         title="Click to approve &amp; show this review">
-                                                    Hidden
-                                                </button>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-end">
-                                            <button class="btn btn-sm btn-ma-ghost text-danger js-delete-feedback py-1 px-3 small"
+                                                        Hidden
+                                                    </button>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="text-end">
+                                                <button class="btn btn-sm btn-ma-ghost text-danger js-delete-feedback py-1 px-3 small"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#deleteFeedbackModal"
                                                     data-id="<?php echo $row['id']; ?>"
                                                     data-name="<?php echo htmlspecialchars($row['name']); ?>">
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
                                 <?php
                                     endwhile;
                                 else:
@@ -224,93 +236,100 @@ require_once('./assets/inc/admin_top.php');
             <?php require_once('./assets/inc/admin_bottom.php'); ?>
 
             <script>
-            document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('DOMContentLoaded', function() {
 
-                // ── 1. Populate Delete Modal ─────────────────────────────
-                document.addEventListener('click', function (e) {
-                    const btn = e.target.closest('.js-delete-feedback');
-                    if (!btn) return;
-                    document.getElementById('deleteFeedbackName').textContent = btn.dataset.name;
-                    document.getElementById('confirmDeleteFeedbackBtn').dataset.id = btn.dataset.id;
-                });
+                    // ── 1. Populate Delete Modal ─────────────────────────────
+                    document.addEventListener('click', function(e) {
+                        const btn = e.target.closest('.js-delete-feedback');
+                        if (!btn) return;
+                        document.getElementById('deleteFeedbackName').textContent = btn.dataset.name;
+                        document.getElementById('confirmDeleteFeedbackBtn').dataset.id = btn.dataset.id;
+                    });
 
-                // ── 2. Confirm Delete ────────────────────────────────────
-                document.getElementById('confirmDeleteFeedbackBtn').addEventListener('click', function () {
-                    const id  = this.dataset.id;
-                    const btn = this;
-                    btn.innerText = 'Deleting…';
-                    btn.disabled  = true;
+                    // ── 2. Confirm Delete ────────────────────────────────────
+                    document.getElementById('confirmDeleteFeedbackBtn').addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const btn = this;
+                        btn.innerText = 'Deleting…';
+                        btn.disabled = true;
 
-                    const fd = new FormData();
-                    fd.append('action', 'delete');
-                    fd.append('id', id);
+                        const fd = new FormData();
+                        fd.append('action', 'delete');
+                        fd.append('id', id);
 
-                    fetch('feedback-ajax.php', { method: 'POST', body: fd })
-                        .then(r => r.json())
-                        .then(data => {
-                            btn.innerText = 'Yes, Delete';
-                            btn.disabled  = false;
-                            if (data.success) {
-                                bootstrap.Modal.getInstance(document.getElementById('deleteFeedbackModal')).hide();
-                                const row = document.querySelector(`.js-admin-row[data-id="${id}"]`);
-                                if (row) row.remove();
-                            } else {
-                                alert('Error deleting feedback.');
-                            }
-                        })
-                        .catch(() => {
-                            btn.innerText = 'Yes, Delete';
-                            btn.disabled  = false;
-                            alert('A network error occurred.');
-                        });
-                });
-
-                // ── 3. Toggle Status (Hidden ↔ Visible) ──────────────────
-                document.addEventListener('click', function (e) {
-                    const toggleBtn = e.target.closest('.js-toggle-status');
-                    if (!toggleBtn) return;
-
-                    const id            = toggleBtn.dataset.id;
-                    const currentStatus = parseInt(toggleBtn.dataset.currentStatus, 10);
-                    const newStatus     = currentStatus === 1 ? 0 : 1;
-
-                    toggleBtn.disabled  = true;
-
-                    const fd = new FormData();
-                    fd.append('action',     'set_status');
-                    fd.append('id',         id);
-                    fd.append('new_status', newStatus);
-
-                    fetch('feedback-ajax.php', { method: 'POST', body: fd })
-                        .then(r => r.json())
-                        .then(data => {
-                            toggleBtn.disabled = false;
-                            if (data.success) {
-                                if (newStatus === 1) {
-                                    toggleBtn.textContent = 'Visible';
-                                    toggleBtn.className   = 'badge rounded-pill px-3 py-1 border-0 badge-trending js-toggle-status';
-                                    toggleBtn.title       = 'Click to hide this review';
+                        fetch('feedback-ajax.php', {
+                                method: 'POST',
+                                body: fd
+                            })
+                            .then(r => r.json())
+                            .then(data => {
+                                btn.innerText = 'Yes, Delete';
+                                btn.disabled = false;
+                                if (data.success) {
+                                    bootstrap.Modal.getInstance(document.getElementById('deleteFeedbackModal')).hide();
+                                    const row = document.querySelector(`.js-admin-row[data-id="${id}"]`);
+                                    if (row) row.remove();
                                 } else {
-                                    toggleBtn.textContent = 'Hidden';
-                                    toggleBtn.className   = 'badge rounded-pill px-3 py-1 border-0 badge-ma js-toggle-status';
-                                    toggleBtn.title       = 'Click to approve & show this review';
+                                    alert('Error deleting feedback.');
                                 }
-                                toggleBtn.dataset.currentStatus = newStatus;
-                            } else {
-                                alert('Error updating status.');
-                            }
-                        })
-                        .catch(() => {
-                            toggleBtn.disabled = false;
-                            alert('A network error occurred.');
-                        });
-                });
+                            })
+                            .catch(() => {
+                                btn.innerText = 'Yes, Delete';
+                                btn.disabled = false;
+                                alert('A network error occurred.');
+                            });
+                    });
 
-            });
+                    // ── 3. Toggle Status (Hidden ↔ Visible) ──────────────────
+                    document.addEventListener('click', function(e) {
+                        const toggleBtn = e.target.closest('.js-toggle-status');
+                        if (!toggleBtn) return;
+
+                        const id = toggleBtn.dataset.id;
+                        const currentStatus = parseInt(toggleBtn.dataset.currentStatus, 10);
+                        const newStatus = currentStatus === 1 ? 0 : 1;
+
+                        toggleBtn.disabled = true;
+
+                        const fd = new FormData();
+                        fd.append('action', 'set_status');
+                        fd.append('id', id);
+                        fd.append('new_status', newStatus);
+
+                        fetch('feedback-ajax.php', {
+                                method: 'POST',
+                                body: fd
+                            })
+                            .then(r => r.json())
+                            .then(data => {
+                                toggleBtn.disabled = false;
+                                if (data.success) {
+                                    if (newStatus === 1) {
+                                        toggleBtn.textContent = 'Visible';
+                                        toggleBtn.className = 'badge rounded-pill px-3 py-1 border-0 badge-trending js-toggle-status';
+                                        toggleBtn.title = 'Click to hide this review';
+                                    } else {
+                                        toggleBtn.textContent = 'Hidden';
+                                        toggleBtn.className = 'badge rounded-pill px-3 py-1 border-0 badge-ma js-toggle-status';
+                                        toggleBtn.title = 'Click to approve & show this review';
+                                    }
+                                    toggleBtn.dataset.currentStatus = newStatus;
+                                } else {
+                                    alert('Error updating status.');
+                                }
+                            })
+                            .catch(() => {
+                                toggleBtn.disabled = false;
+                                alert('A network error occurred.');
+                            });
+                    });
+
+                });
             </script>
 
         </main>
     </div>
 
 </body>
+
 </html>

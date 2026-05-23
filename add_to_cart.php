@@ -18,11 +18,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Get product price
-    $sqlPrice = "SELECT price FROM products WHERE id = $productId LIMIT 1";
+    // Check product existence and status
+    $sqlPrice = "SELECT p.price, p.status, c.status as cat_status 
+                 FROM products p 
+                 JOIN categories c ON p.category_id = c.id 
+                 WHERE p.id = $productId LIMIT 1";
     $resPrice = mysqli_query($conn, $sqlPrice);
     if ($resPrice && mysqli_num_rows($resPrice) > 0) {
         $product = mysqli_fetch_assoc($resPrice);
+        
+        // Block if product or category is inactive
+        if ($product['status'] == 0 || $product['cat_status'] == 0) {
+            echo json_encode(['success' => false, 'message' => 'This product is currently unavailable.']);
+            exit();
+        }
+        
         $price = $product['price'];
     } else {
         echo json_encode(['success' => false, 'message' => 'Product not found.']);

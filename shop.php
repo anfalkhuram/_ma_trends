@@ -77,14 +77,11 @@ require_once('inc/top.php');
             <div class="row g-4" id="trending">
                 <!-- Each item uses .js-product + data attributes for filter -->
                 <?php
-                $sqlProducts = "SELECT * FROM products where status=1";
+                $sqlProducts = "SELECT p.*, c.name as cat_name FROM products p JOIN categories c ON p.category_id = c.id WHERE p.status = 1 AND c.status = 1";
                 $resultProducts = mysqli_query($conn, $sqlProducts);
                 if (mysqli_num_rows($resultProducts) > 0) {
                     while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
-                        $productCategoryId = $rowProduct['category_id'];
-                        $sqlCategory = "SELECT * FROM categories WHERE id = $productCategoryId;";
-                        $resultCategory = mysqli_query($conn, $sqlCategory);
-                        $category = mysqli_fetch_assoc($resultCategory);
+                        $category = ['name' => $rowProduct['cat_name']];
 
                         $productIDForDetails = $rowProduct['id'];
                         $sqlProductDetails = "SELECT * FROM product_details WHERE product_id = $productIDForDetails;";

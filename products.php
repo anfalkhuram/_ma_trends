@@ -7,21 +7,39 @@ $isUserLoggedIn = isset($_SESSION['user']['id']) && !empty($_SESSION['user']['id
 $loggedUserName = $isUserLoggedIn ? htmlspecialchars($_SESSION['user']['name']) : '';
 $loggedUserId   = $isUserLoggedIn ? (int)$_SESSION['user']['id'] : 0;
 if ($productId) {
-    $sqlProduct = "SELECT * FROM products WHERE id = $productId";
+    // JOIN categories to check category status as well
+    $sqlProduct = "SELECT p.*, c.status as cat_status, c.name as cat_name 
+                   FROM products p 
+                   JOIN categories c ON p.category_id = c.id 
+                   WHERE p.id = $productId";
     $resultProduct = mysqli_query($conn, $sqlProduct);
+
     if (mysqli_num_rows($resultProduct) > 0) {
         $rowProduct = mysqli_fetch_assoc($resultProduct);
-    }
-    $productDetailsSql = "SELECT * FROM product_details WHERE product_id = $productId";
-    $productDetailsResult = mysqli_query($conn, $productDetailsSql);
-    if (mysqli_num_rows($productDetailsResult) > 0) {
-        $rowProductDetails = mysqli_fetch_assoc($productDetailsResult);
+
+        // Redirect if product is hidden OR its category is hidden
+        if ($rowProduct['status'] == 0 || $rowProduct['cat_status'] == 0) {
+            header("Location: shop");
+            exit();
+        }
+
+        // Populate category array for compatibility
+        $category = ['name' => $rowProduct['cat_name'], 'status' => $rowProduct['cat_status']];
+    } else {
+        // Product not found in database
+        header("Location: shop");
+        exit();
     }
 
-    $productCategoryId = $rowProduct['category_id'];
-    $sqlCategory = "SELECT * FROM categories WHERE id = $productCategoryId;";
-    $resultCategory = mysqli_query($conn, $sqlCategory);
-    $category = mysqli_fetch_assoc($resultCategory);
+    $productDetailsSql = "SELECT * FROM product_details WHERE product_id = $productId";
+    $productDetailsResult = mysqli_query($conn, $productDetailsSql);
+    if ($productDetailsResult && mysqli_num_rows($productDetailsResult) > 0) {
+        $rowProductDetails = mysqli_fetch_assoc($productDetailsResult);
+    } else {
+        // If product has no details, it shouldn't be accessible
+        header("Location: shop");
+        exit();
+    }
 } else {
     // Redirect to shop page if no product ID is provided
     header("Location: shop");

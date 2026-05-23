@@ -1,6 +1,44 @@
+# ── Custom Error Pages ────────────────────────────────────────
+<If "%{HTTP_HOST} == 'localhost' || %{HTTP_HOST} == '127.0.0.1'">
+    # Local environment
+    ErrorDocument 400 /_ma_trends/400.php
+    ErrorDocument 401 /_ma_trends/401.php
+    ErrorDocument 403 /_ma_trends/403.php
+    ErrorDocument 404 /_ma_trends/404.php
+    ErrorDocument 405 /_ma_trends/405.php
+    ErrorDocument 408 /_ma_trends/408.php
+    ErrorDocument 409 /_ma_trends/409.php
+    ErrorDocument 413 /_ma_trends/413.php
+    ErrorDocument 429 /_ma_trends/429.php
+    ErrorDocument 500 /_ma_trends/500.php
+    ErrorDocument 501 /_ma_trends/501.php
+    ErrorDocument 502 /_ma_trends/502.php
+    ErrorDocument 503 /_ma_trends/503.php
+    ErrorDocument 504 /_ma_trends/504.php
+</If>
+<Else>
+    # Production environment (Hostinger - matrends.store)
+    ErrorDocument 400 /400.php
+    ErrorDocument 401 /401.php
+    ErrorDocument 403 /403.php
+    ErrorDocument 404 /404.php
+    ErrorDocument 405 /405.php
+    ErrorDocument 408 /408.php
+    ErrorDocument 409 /409.php
+    ErrorDocument 413 /413.php
+    ErrorDocument 429 /429.php
+    ErrorDocument 500 /500.php
+    ErrorDocument 501 /501.php
+    ErrorDocument 502 /502.php
+    ErrorDocument 503 /503.php
+    ErrorDocument 504 /504.php
+</Else>
+
+
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
 
 # ── Security Headers ──────────────────────────────────────────
 Header always set X-Frame-Options "SAMEORIGIN"

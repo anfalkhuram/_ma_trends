@@ -18,9 +18,14 @@ $ogUrl = "https://www.matrends.store/shop";
     isset($_GET['id']) ? $_GET['id'] : null;
     if ($_GET['id'] != null) {
         $categoryId = $_GET['id'];
-        $sqlCategory = "SELECT name FROM categories WHERE id = $categoryId;";
+        $sqlCategory = "SELECT name, status FROM categories WHERE id = $categoryId;";
         $resultCategory = mysqli_query($conn, $sqlCategory);
         $category = mysqli_fetch_assoc($resultCategory);
+
+        if (!$category || $category['status'] != 1) {
+            header("Location: shop");
+            exit();
+        }
     } else {
         // Redirect to shop page if no category ID is provided
         header("Location: shop");
