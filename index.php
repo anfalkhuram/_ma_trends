@@ -89,24 +89,26 @@ require_once('inc/top.php');
                 <!-- 8 cards -->
 
                 <?php
-                $sqlProducts = "SELECT p.* FROM products p JOIN product_details pd ON pd.product_id = p.id WHERE p.status = 1 AND pd.label = 2;";
+                $sqlProducts = "SELECT p.*, pd.label, pd.image, c.name as category_name 
+                                FROM products p 
+                                JOIN product_details pd ON pd.product_id = p.id 
+                                JOIN categories c ON p.category_id = c.id 
+                                WHERE p.status = 1 AND pd.label = 2;";
                 $resultProducts = mysqli_query($conn, $sqlProducts);
                 if (mysqli_num_rows($resultProducts) > 0) {
                     while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
-                    $productCategoryId = $rowProduct['category_id'];
-                    $sqlCategory = "SELECT * FROM categories WHERE id = $productCategoryId;";
-                    $resultCategory = mysqli_query($conn, $sqlCategory);
-                    $category = mysqli_fetch_assoc($resultCategory);
-
-                    $productIDForDetails = $rowProduct['id'];
-                    $sqlProductDetails = "SELECT * FROM product_details WHERE product_id = $productIDForDetails;";
-                    $resultProductDetails = mysqli_query($conn, $sqlProductDetails);
-                    $productDetails = mysqli_fetch_assoc($resultProductDetails);
+                        $productDetails = [
+                            'label' => $rowProduct['label'],
+                            'image' => $rowProduct['image']
+                        ];
+                        $category = [
+                            'name' => $rowProduct['category_name']
+                        ];
                 ?>
                         <div class="col-12 col-md-4 col-xl-3">
                             <div class="ma-card ma-product">
 
-                                <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" />
+                                <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" loading="lazy" />
                                 <div class="p-3">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                         

@@ -56,19 +56,25 @@
              <div class="row g-4">
 
                  <?php
-                    $sqlProducts = "SELECT * FROM products WHERE category_id = $categoryId AND status = 1;";
+                    $sqlProducts = "SELECT p.*, pd.image, pd.label, pd.gender, pd.options, pd.value 
+                                    FROM products p 
+                                    JOIN product_details pd ON pd.product_id = p.id
+                                    WHERE p.category_id = $categoryId AND p.status = 1;";
                     $resultProducts = mysqli_query($conn, $sqlProducts);
                     if (mysqli_num_rows($resultProducts) > 0) {
                         while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
-                            $productIDForDetails = $rowProduct['id'];
-                            $sqlProductDetails = "SELECT * FROM product_details WHERE product_id = $productIDForDetails;";
-                            $resultProductDetails = mysqli_query($conn, $sqlProductDetails);
-                            $productDetails = mysqli_fetch_assoc($resultProductDetails);
+                            $productDetails = [
+                                'image' => $rowProduct['image'],
+                                'label' => $rowProduct['label'],
+                                'gender' => $rowProduct['gender'],
+                                'options' => $rowProduct['options'],
+                                'value' => $rowProduct['value']
+                            ];
                     ?>
                          <div class="col-12 col-md-4 col-xl-3">
                              <div class="ma-card ma-product">
 
-                                 <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" />
+                                 <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" loading="lazy" />
                                  <div class="p-3">
                                      <div class="d-flex flex-wrap gap-2 mb-2">
 

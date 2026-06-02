@@ -77,16 +77,20 @@ require_once('inc/top.php');
             <div class="row g-4" id="trending">
                 <!-- Each item uses .js-product + data attributes for filter -->
                 <?php
-                $sqlProducts = "SELECT p.*, c.name as cat_name FROM products p JOIN categories c ON p.category_id = c.id WHERE p.status = 1 AND c.status = 1";
+                $sqlProducts = "SELECT p.*, c.name as cat_name, pd.image, pd.gender, pd.label 
+                                FROM products p 
+                                JOIN categories c ON p.category_id = c.id 
+                                LEFT JOIN product_details pd ON pd.product_id = p.id
+                                WHERE p.status = 1 AND c.status = 1";
                 $resultProducts = mysqli_query($conn, $sqlProducts);
                 if (mysqli_num_rows($resultProducts) > 0) {
                     while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
                         $category = ['name' => $rowProduct['cat_name']];
-
-                        $productIDForDetails = $rowProduct['id'];
-                        $sqlProductDetails = "SELECT * FROM product_details WHERE product_id = $productIDForDetails;";
-                        $resultProductDetails = mysqli_query($conn, $sqlProductDetails);
-                        $productDetails = mysqli_fetch_assoc($resultProductDetails);
+                        $productDetails = [
+                            'image' => $rowProduct['image'],
+                            'gender' => $rowProduct['gender'],
+                            'label' => $rowProduct['label']
+                        ];
                 ?>
                         <div class="col-6 col-md-4 col-xl-3 js-product" data-category="<?php echo $category['name']; ?>" data-gender="<?php
                                                                                                                                         if ($productDetails['gender'] == 1) {
@@ -99,7 +103,7 @@ require_once('inc/top.php');
                                                                                                                                         ?>">
                             <div class="ma-card ma-product">
 
-                                <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" />
+                                <img class="ma-card-img" src="./admins/assets/images/products/<?php echo $productDetails['image']; ?>" alt="<?php echo $rowProduct['name']; ?>" loading="lazy" />
                                 <div class="p-3">
                                     <div class="d-flex flex-wrap gap-2 mb-2">
                                         <?php

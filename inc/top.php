@@ -27,6 +27,10 @@ if($pageName == 'Index'){
 
 
   <link rel="shortcut icon" href="assets/img/ma_trends_ill.png" type="image/x-icon">
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/img/hero-image.jpeg" as="image">
+  
   <!-- Google Fonts (Poppins + Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,6 +44,6 @@ if($pageName == 'Index'){
   <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- Global CSS -->
-  <link href="assets/css/styles.css" rel="stylesheet" />
+  <link href="assets/css/styles.css?v=<?php echo time(); ?>" rel="stylesheet" />
 
 </head>
