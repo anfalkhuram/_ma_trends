@@ -19,6 +19,9 @@ require_once('inc/top.php')
 <body>
     <?php
     require_once('inc/navbar.php');
+    
+    // Ensure the user is logged in and redirect back here after login if not
+    requireLogin('checkout');
 
     $checkoutUserId = $_SESSION['user']['id'] ?? $_SESSION['admin']['id'] ?? 0;
     $checkoutUserData = [];
@@ -27,6 +30,29 @@ require_once('inc/top.php')
         $resUser = mysqli_query($conn, $sqlUser);
         if ($resUser) {
             $checkoutUserData = mysqli_fetch_assoc($resUser);
+            
+            // If user is not verified, force OTP verification
+            if ($checkoutUserData['is_verified'] != 1) {
+                require_once('inc/otp_functions.php');
+                $role = $checkoutUserData['status'] == 'admin' ? 'admin' : 'user';
+                storeAndSendOTP($conn, $checkoutUserData['email'], $role, 'login_verification');
+                
+                // Set temp_user to continue the flow
+                $_SESSION['temp_user'] = [
+                    'id'    => $checkoutUserData['id'],
+                    'name'  => $checkoutUserData['name'],
+                    'email' => $checkoutUserData['email'],
+                    'status'=> $checkoutUserData['status']
+                ];
+                
+                // Unset active session to lock them out until verified
+                if(isset($_SESSION['user'])) unset($_SESSION['user']);
+                if(isset($_SESSION['admin'])) unset($_SESSION['admin']);
+                
+                session_write_close();
+                echo "<script>window.location.href='verify_otp.php?purpose=login_verification&redirect=checkout';</script>";
+                exit();
+            }
         }
     }
     ?>

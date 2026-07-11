@@ -16,6 +16,10 @@ $loginError = '';
 $registerError = '';
 $registerSuccess = '';
 
+if (isset($_GET['reset']) && $_GET['reset'] === 'success') {
+    $registerSuccess = 'Password reset successfully. You can now log in.';
+}
+
 // Capture and WHITELIST the return URL to prevent open redirect
 $allowedRedirects = ['cart', 'checkout', 'index', 'shop', 'profile', 'products'];
 $rawRedirect = isset($_GET['redirect']) ? $_GET['redirect'] : '';
@@ -51,26 +55,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user = mysqli_fetch_assoc($resultUser);
 
                 if (password_verify($password, $user['password'])) {
-                    session_regenerate_id(true); // prevent session fixation
-                    if ($user['status'] == 'admin') {
-                        $_SESSION['admin'] = [
-                            'id'    => $user['id'],
-                            'name'  => $user['name'],
-                            'email' => $user['email']
-                        ];
-                        session_write_close();
-                        header("Location: admins/dashboard");
-                        exit();
-                    } else {
-                        $_SESSION['user'] = [
-                            'id'    => $user['id'],
-                            'name'  => $user['name'],
-                            'email' => $user['email']
-                        ];
-                        $goto = $redirect ? $redirect : 'index';
-                        session_write_close();
-                        header("Location: " . $goto);
-                        exit();
+                    require_once('inc/otp_functions.php');
+                    try {
+                        $otpSent = storeAndSendOTP($conn, $user['email'], $user['status'] == 'admin' ? 'admin' : 'user', 'login_verification');
+                        
+                        if ($otpSent) {
+                            // Store user data temporarily
+                            $_SESSION['temp_user'] = [
+                                'id'    => $user['id'],
+                                'name'  => $user['name'],
+                                'email' => $user['email'],
+                                'status'=> $user['status']
+                            ];
+                            
+                            $redirectParam = $redirect ? '&redirect=' . urlencode($redirect) : '';
+                            header("Location: verify_otp.php?purpose=login_verification" . $redirectParam);
+                            exit();
+                        } else {
+                            $loginError = 'Could not send OTP. Please ensure database tables and email settings are configured on the live server.';
+                        }
+                    } catch (Throwable $e) {
+                        $loginError = 'System error: ' . $e->getMessage() . '. Did you forget to upload vendor folder or run the database SQL?';
                     }
                 } else {
                     $loginError = 'Incorrect email or password.';
@@ -91,12 +96,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <script>
                     window.onload = function() {
                         const toastMsg = document.getElementById('errorToastMessage');
-                        toastMsg.innerText = "<?php echo addslashes($loginError); ?>";
-                        const toastTrigger = document.getElementById('errorToast');
-                        const toast = new bootstrap.Toast(toastTrigger);
-                        toast.show();
+                        if (toastMsg) {
+                            toastMsg.innerText = "<?php echo addslashes($loginError); ?>";
+                            const toastTrigger = document.getElementById('errorToast');
+                            const toast = new bootstrap.Toast(toastTrigger);
+                            toast.show();
+                        } else {
+                            alert("<?php echo addslashes($loginError); ?>");
+                        }
                     }
                 </script>
+            <?php endif; ?>
+            <?php if ($registerSuccess): ?>
+                <div class="alert alert-success text-center">
+                    <?php echo htmlspecialchars($registerSuccess); ?>
+                </div>
             <?php endif; ?>
             <div class="ma-card p-4 p-md-5 ma-shadow">
                 <div class="text-center">
@@ -116,11 +130,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input class="form-control" type="email" name="email" placeholder="you@example.com" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required />
               </div>
               <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <label class="form-label ma-muted">Password</label>
-                  
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label ma-muted mb-0">Password</label>
+                  <a href="forgot_password.php" class="text-decoration-none small text-ma">Forgot Password?</a>
                 </div>
-                <input class="form-control" type="password" name="password" placeholder="••••••••" required />
+                <div class="position-relative">
+                  <input class="form-control toggle-password-field pe-5" type="password" name="password" placeholder="••••••••" required />
+                  <button type="button" class="btn border-0 position-absolute end-0 top-50 translate-middle-y px-3 js-password-toggle" tabindex="-1">
+                      <i class="fas fa-eye text-white"></i>
+                  </button>
+                </div>
               </div>
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="remember" />
@@ -138,5 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <?php require_once('inc/bottom.php'); ?>
+    <script src="assets/js/password-toggle.js"></script>
 </body>
 </html>

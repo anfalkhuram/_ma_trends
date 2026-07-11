@@ -24,6 +24,16 @@ try {
     }
 
     $userId = $_SESSION['user']['id'] ?? $_SESSION['admin']['id'] ?? 0;
+    
+    // Check if user is verified
+    $sqlVerify = "SELECT is_verified FROM users WHERE id = $userId";
+    $resVerify = mysqli_query($conn, $sqlVerify);
+    if ($resVerify && mysqli_num_rows($resVerify) > 0) {
+        $rowVerify = mysqli_fetch_assoc($resVerify);
+        if ($rowVerify['is_verified'] != 1) {
+            respond(['success' => false, 'message' => 'Please verify your email to place an order.']);
+        }
+    }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sqlCart = "SELECT c.*, p.name as product_name FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = $userId";
@@ -116,6 +126,34 @@ try {
 
         if ($successDetails) {
             mysqli_query($conn, "DELETE FROM cart WHERE user_id = $userId");
+            
+            // Send Transactional Emails
+            require_once('inc/email_functions.php');
+            $host = "http" . (isset($_SERVER['HTTPS']) ? "s" : "") . "://" . $_SERVER['HTTP_HOST'];
+            
+            $emailData = [
+                'name' => $name,
+                'orderId' => $orderId,
+                'items' => $cartItems,
+                'shippingCost' => $shippingCost,
+                'total' => $total,
+                'paymentMethod' => $paymentMethod,
+                'address' => $address,
+                'city' => $city,
+                'region' => $region,
+                'postalcode' => $postalcode,
+                'ordersUrl' => $host . '/orders.php',
+                'adminOrdersUrl' => $host . '/admins/orders.php',
+                'customerEmail' => $email,
+                'phone' => $phone
+            ];
+            
+            // Customer email
+            sendTransactionalEmail($email, "Your MATrends Order Has Been Placed", 'order_placed', $emailData, 'user', $orderId);
+            
+            // Admin email
+            sendTransactionalEmail(SMTP_USERNAME, "New Order Received on MATrends", 'admin_new_order', $emailData, 'admin', $orderId);
+            
             respond(['success' => true, 'message' => 'Order placed successfully.']);
         } else {
             respond(['success' => false, 'message' => 'Order placed but some items failed to save. Contact support.']);

@@ -56,16 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $insertSql = "INSERT INTO users (name, email, password, status, created_at)
                               VALUES ('$safeName', '$safeEmail', '$hashed', 'user', NOW())";
                 if (mysqli_query($conn, $insertSql)) {
-                    // Auto-login after register
-                    $newId = mysqli_insert_id($conn);
-                    $_SESSION['user'] = [
-                        'id' => $newId,
-                        'name' => $name,
-                        'email' => $email
-                    ];
+                    // Send OTP
+                    require_once('inc/otp_functions.php');
+                    storeAndSendOTP($conn, $safeEmail, 'user', 'signup_verification');
 
-                    $goto = $redirect ? $redirect : 'index';
-                    header("Location: " . $goto);
+                    // Redirect to verification page
+                    $redirectParam = $redirect ? '&redirect=' . urlencode($redirect) : '';
+                    header("Location: verify_otp.php?email=" . urlencode($email) . "&purpose=signup_verification" . $redirectParam);
                     exit();
                 } else {
                     $registerError = 'Something went wrong. Please try again.';
@@ -115,12 +112,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="mb-3">
                             <label class="form-label ma-muted">Password</label>
-                            <input class="form-control" type="password" name="reg_password" placeholder="••••••••" required />
+                            <div class="position-relative">
+                                <input class="form-control toggle-password-field pe-5" type="password" name="reg_password" placeholder="••••••••" required />
+                                <button type="button" class="btn border-0 position-absolute end-0 top-50 translate-middle-y px-3 js-password-toggle" tabindex="-1">
+                                    <i class="fas fa-eye text-white"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label ma-muted">Confirm Password</label>
-                            <input class="form-control" type="password" name="reg_confirm" placeholder="••••••••" required />
+                            <div class="position-relative">
+                                <input class="form-control toggle-password-field pe-5" type="password" name="reg_confirm" placeholder="••••••••" required />
+                                <button type="button" class="btn border-0 position-absolute end-0 top-50 translate-middle-y px-3 js-password-toggle" tabindex="-1">
+                                    <i class="fas fa-eye text-white"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-ma w-100">Sign Up</button>
@@ -136,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <?php require_once('inc/bottom.php'); ?>
+    <script src="assets/js/password-toggle.js"></script>
 </body>
 
 </html>

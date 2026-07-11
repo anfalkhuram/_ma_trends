@@ -8,18 +8,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
     $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
     
     if ($id > 0) {
-        if ($action == 'cancel') {
-            mysqli_query($conn, "UPDATE orders SET status = 2 WHERE id = $id");
-            echo json_encode(['success' => true]);
-            exit;
-        } elseif ($action == 'deliver') {
-            mysqli_query($conn, "UPDATE orders SET status = 1 WHERE id = $id");
-            echo json_encode(['success' => true]);
-            exit;
-        } elseif ($action == 'confirm') {
-            mysqli_query($conn, "UPDATE orders SET order_confirmation = 1 WHERE id = $id");
-            echo json_encode(['success' => true]);
-            exit;
+        $resOrder = mysqli_query($conn, "SELECT * FROM orders WHERE id = $id LIMIT 1");
+        if ($resOrder && mysqli_num_rows($resOrder) > 0) {
+            $order = mysqli_fetch_assoc($resOrder);
+            
+            // Note: from admins/orders.php, we have to go up a dir to include email_functions.php
+            require_once(__DIR__ . '/../inc/email_functions.php');
+            $host = "http" . (isset($_SERVER['HTTPS']) ? "s" : "") . "://" . $_SERVER['HTTP_HOST'];
+            $data = [
+                'name' => $order['name'],
+                'orderId' => $order['id'],
+                'total' => $order['total'],
+                'shopUrl' => $host . '/index.php'
+            ];
+            
+            if ($action == 'cancel') {
+                mysqli_query($conn, "UPDATE orders SET status = 2 WHERE id = $id");
+                sendTransactionalEmail($order['email'], "Your MATrends Order Has Been Canceled", 'order_canceled', $data, 'user', $id);
+                echo json_encode(['success' => true]);
+                exit;
+            } elseif ($action == 'deliver') {
+                mysqli_query($conn, "UPDATE orders SET status = 1 WHERE id = $id");
+                sendTransactionalEmail($order['email'], "Your MATrends Order Has Been Delivered", 'order_delivered', $data, 'user', $id);
+                echo json_encode(['success' => true]);
+                exit;
+            } elseif ($action == 'confirm') {
+                mysqli_query($conn, "UPDATE orders SET order_confirmation = 1 WHERE id = $id");
+                sendTransactionalEmail($order['email'], "Your MATrends Order Has Been Confirmed", 'order_confirmed', $data, 'user', $id);
+                echo json_encode(['success' => true]);
+                exit;
+            }
         }
     }
     echo json_encode(['success' => false, 'message' => 'Invalid request']);
