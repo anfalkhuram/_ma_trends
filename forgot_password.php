@@ -32,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             storeAndSendOTP($conn, $email, $role, 'forgot_password');
         }
         
-        header("Location: verify_otp.php?email=" . urlencode($email) . "&purpose=forgot_password");
+        $_SESSION['forgot_password_email'] = $email;
+        header("Location: verify_otp.php?purpose=forgot_password");
         exit();
     }
 }
@@ -58,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
                 <div class="ma-card p-4 p-md-5 ma-shadow">
                     <div class="text-center mb-4">
-                        <img src="./assets/img/ma_trends_ill.png" alt="" width="80" loading="lazy" class="ma-pill">
+                        <img src="./assets/img/ma_trends_ill.webp" alt="" width="80" loading="lazy" class="ma-pill">
                         <h1 class="h4 fw-bold mt-3 text-center">Forgot Password</h1>
                         <p class="ma-muted small">Enter your email address and we'll send you a 6-digit code to reset your password.</p>
                     </div>

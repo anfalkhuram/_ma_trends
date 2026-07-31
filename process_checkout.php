@@ -50,9 +50,10 @@ try {
     $address = mysqli_real_escape_string($conn, $_POST['shipping_address'] ?? '');
     $region = mysqli_real_escape_string($conn, $_POST['shipping_region'] ?? '');
     $postalcode = mysqli_real_escape_string($conn, $_POST['shipping_postalcode'] ?? '');
+    $specialInstructions = mysqli_real_escape_string($conn, $_POST['special_instructions'] ?? '');
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod'] ?? '');
 
-    if (empty($name) || empty($email) || empty($phone) || empty($city) || empty($address) || empty($region) || empty($postalcode) || empty($paymentMethod)) {
+    if (empty($name) || empty($email) || empty($phone) || empty($city) || empty($address) || empty($region) || empty($postalcode) || empty($specialInstructions) || empty($paymentMethod)) {
         respond(['success' => false, 'message' => 'Please fill all required shipping fields.']);
     }
 
@@ -89,12 +90,38 @@ try {
             mkdir($uploadDir, 0755, true);
         }
 
-        // Random filename — never use the original filename
-        $ext      = $allowedMimes[$realMime];
-        $fileName = bin2hex(random_bytes(16)) . '.' . $ext;
+        // Random filename — always convert to WebP
+        $fileName = bin2hex(random_bytes(16)) . '.webp';
         $targetFilePath = $uploadDir . $fileName;
+        $tmpName = $_FILES['paymentScreenshot']['tmp_name'];
 
-        if (move_uploaded_file($_FILES['paymentScreenshot']['tmp_name'], $targetFilePath)) {
+        $image = null;
+        if ($realMime == 'image/jpeg') {
+            $image = imagecreatefromjpeg($tmpName);
+        } elseif ($realMime == 'image/png') {
+            $image = imagecreatefrompng($tmpName);
+            imagepalettetotruecolor($image);
+            imagealphablending($image, true);
+            imagesavealpha($image, true);
+        } elseif ($realMime == 'image/gif') {
+            $image = imagecreatefromgif($tmpName);
+        }
+
+        $uploadSuccess = false;
+        if ($image) {
+            $uploadSuccess = imagewebp($image, $targetFilePath, 80);
+            imagedestroy($image);
+        } elseif ($realMime == 'image/webp') {
+            $uploadSuccess = move_uploaded_file($tmpName, $targetFilePath);
+        } else {
+            // Fallback
+            $ext = $allowedMimes[$realMime];
+            $fileName = bin2hex(random_bytes(16)) . '.' . $ext;
+            $targetFilePath = $uploadDir . $fileName;
+            $uploadSuccess = move_uploaded_file($tmpName, $targetFilePath);
+        }
+
+        if ($uploadSuccess) {
             $receiptImageName = $fileName;
         } else {
             respond(['success' => false, 'message' => 'Error uploading receipt. Please try again.']);
@@ -103,8 +130,8 @@ try {
 
     // 5. Insert into orders table
     // Note: status is set to 0 by default based on table definition, but we can explicitly set it to 0
-    $sqlInsertOrder = "INSERT INTO orders (user_id, name, phone, email, address, city, region, postalcode, total, payment_method, shipping, receipt_image, status, created_at) 
-                       VALUES ($userId, '$name', '$phone', '$email', '$address', '$city', '$region', '$postalcode', $total, '$paymentMethod', $shippingCost, " . ($receiptImageName ? "'$receiptImageName'" : "NULL") . ", 0, NOW())";
+    $sqlInsertOrder = "INSERT INTO orders (user_id, name, phone, email, address, city, region, postalcode, special_instructions, total, payment_method, shipping, receipt_image, status, created_at) 
+                       VALUES ($userId, '$name', '$phone', '$email', '$address', '$city', '$region', '$postalcode', '$specialInstructions', $total, '$paymentMethod', $shippingCost, " . ($receiptImageName ? "'$receiptImageName'" : "NULL") . ", 0, NOW())";
     
     if (mysqli_query($conn, $sqlInsertOrder)) {
         $orderId = mysqli_insert_id($conn);

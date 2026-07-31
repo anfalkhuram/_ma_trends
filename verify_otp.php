@@ -20,6 +20,10 @@ $email = $_GET['email'] ?? '';
 
 if ($purpose === 'login_verification' && isset($_SESSION['temp_user'])) {
     $email = $_SESSION['temp_user']['email'];
+} elseif ($purpose === 'forgot_password' && isset($_SESSION['forgot_password_email'])) {
+    $email = $_SESSION['forgot_password_email'];
+} elseif ($purpose === 'signup_verification' && isset($_SESSION['signup_verification_email'])) {
+    $email = $_SESSION['signup_verification_email'];
 }
 
 if (!$email || !$purpose) {
@@ -145,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
                 <div class="ma-card p-4 p-md-5 ma-shadow">
                     <div class="text-center mb-4">
-                        <img src="./assets/img/ma_trends_ill.png" alt="" width="80" loading="lazy" class="ma-pill">
+                        <img src="./assets/img/ma_trends_ill.webp" alt="" width="80" loading="lazy" class="ma-pill">
                         <h1 class="h4 fw-bold mt-3 text-center">Verify Email</h1>
                         <p class="ma-muted small">We've sent a 6-digit code to <strong><?php echo htmlspecialchars($email); ?></strong>.</p>
                     </div>

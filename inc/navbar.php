@@ -13,12 +13,18 @@
         }
     }
     ?>
-
-
- <nav class="navbar navbar-expand-lg navbar-dark fixed-top ma-navbar">
-     <div class="container">
+ <div class="fixed-top w-100" style="z-index: 1040;">
+     <div style="background-color: var(--ma-gold); color: #0b0c0f; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+         <marquee behavior="scroll" direction="left" scrollamount="8" class="fw-bold m-0 d-flex align-items-center" style="font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase;">
+             <span class="mx-4">🎉 Azadi Sale: 100% Free Delivery for Full August Month!</span>
+             <span class="mx-4">🎉 Azadi Sale: 100% Free Delivery for Full August Month!</span>
+             <span class="mx-4">🎉 Azadi Sale: 100% Free Delivery for Full August Month!</span>
+         </marquee>
+     </div>
+     <nav class="navbar navbar-expand-lg navbar-dark ma-navbar">
+         <div class="container">
          <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-             <span class="ma-pill color-soft-gold fs-4"><img src="assets/img/ma_trends_ill.png" alt="logo..." width="40"> <span class="ma-trends-logo-text">Trends</span></span>
+             <span class="ma-pill color-soft-gold fs-4"><img src="assets/img/ma_trends_ill.webp" alt="logo..." width="40"> <span class="ma-trends-logo-text">Trends</span></span>
 
              <span class="d-none d-md-inline ma-muted fw-semibold mt-3">What&rsquo;s Trending
                  Now</span>
@@ -99,3 +105,4 @@
          </div>
      </div>
  </nav>
+</div>

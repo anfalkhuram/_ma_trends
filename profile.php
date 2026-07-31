@@ -215,6 +215,13 @@ $pageTitle = "My Account | MATrends";
                                                         <?php echo $statusBadge; ?>
                                                     </div>
                                                     
+                                                    <?php if(!empty($order['special_instructions'])): ?>
+                                                    <div class="mb-3 ma-muted">
+                                                        <strong>Special Instructions:</strong><br>
+                                                        <?php echo nl2br(htmlspecialchars($order['special_instructions'])); ?>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                    
                                                     <div class="table-responsive">
                                                         <table class="table table-dark table-striped align-middle mb-0 border ma-border">
                                                             <thead>

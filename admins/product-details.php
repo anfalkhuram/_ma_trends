@@ -13,10 +13,34 @@ if (isset($_POST['add_product_details'])) {
     $stock      = $_POST['stock'];
     $ratings    = $_POST['ratings'];
 
-    // FILE UPLOAD (correct way)
-    $imageName =  time() . "_" . $_FILES["image"]["name"];
-    $tmpName   = $_FILES['image']['tmp_name'];
-    move_uploaded_file($tmpName, "./assets/images/products/" . $imageName);
+    // FILE UPLOAD (WebP Conversion)
+    $originalName = $_FILES["image"]["name"];
+    $tmpName      = $_FILES['image']['tmp_name'];
+    $imageName    = time() . "_" . pathinfo($originalName, PATHINFO_FILENAME) . ".webp";
+    $destination  = "./assets/images/products/" . $imageName;
+
+    $info = getimagesize($tmpName);
+    $image = null;
+    if ($info !== false) {
+        $mime = $info['mime'];
+        if ($mime == 'image/jpeg') {
+            $image = imagecreatefromjpeg($tmpName);
+        } elseif ($mime == 'image/png') {
+            $image = imagecreatefrompng($tmpName);
+            imagepalettetotruecolor($image);
+            imagealphablending($image, true);
+            imagesavealpha($image, true);
+        } elseif ($mime == 'image/webp') {
+            move_uploaded_file($tmpName, $destination);
+        }
+    }
+    
+    if ($image) {
+        imagewebp($image, $destination, 85);
+        imagedestroy($image);
+    } elseif (!file_exists($destination)) {
+        move_uploaded_file($tmpName, $destination); // Fallback
+    }
     $sql = "INSERT INTO product_details 
     (product_id, image, options, value, gender, label, stock, ratings)
     VALUES 
@@ -44,10 +68,34 @@ if (isset($_POST['edit_product_details'])) {
 
     // Check if a new image was uploaded
     if (!empty($_FILES['image']['name'])) {
-        // Upload new image
-        $imageNameNew = time() . "_" . $_FILES["image"]["name"];
-        $tmpName   = $_FILES['image']['tmp_name'];
-        move_uploaded_file($tmpName, "./assets/images/products/" . $imageNameNew);
+        // Upload new image (WebP Conversion)
+        $originalName = $_FILES["image"]["name"];
+        $tmpName      = $_FILES['image']['tmp_name'];
+        $imageNameNew = time() . "_" . pathinfo($originalName, PATHINFO_FILENAME) . ".webp";
+        $destination  = "./assets/images/products/" . $imageNameNew;
+
+        $info = getimagesize($tmpName);
+        $image = null;
+        if ($info !== false) {
+            $mime = $info['mime'];
+            if ($mime == 'image/jpeg') {
+                $image = imagecreatefromjpeg($tmpName);
+            } elseif ($mime == 'image/png') {
+                $image = imagecreatefrompng($tmpName);
+                imagepalettetotruecolor($image);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
+            } elseif ($mime == 'image/webp') {
+                move_uploaded_file($tmpName, $destination);
+            }
+        }
+        
+        if ($image) {
+            imagewebp($image, $destination, 85);
+            imagedestroy($image);
+        } elseif (!file_exists($destination)) {
+            move_uploaded_file($tmpName, $destination); // Fallback
+        }
 
         // Delete old image file if it exists and is different from the new one
         if (!empty($imageNameOld) && $imageNameOld !== $imageNameNew) {

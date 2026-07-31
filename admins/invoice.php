@@ -104,7 +104,7 @@ if ($order['status'] == 1) {
             <!-- Header -->
             <div class="row align-items-center mb-4">
                 <div class="col-md-6 d-flex align-items-center gap-3">
-                    <img src="../assets/img/ma_trends_ill.png" class="store-logo">
+                    <img src="../assets/img/ma_trends_ill.webp" class="store-logo">
 
                     <div>
                         <h3 class="mb-0">MATrends Store</h3>
@@ -144,6 +144,7 @@ if ($order['status'] == 1) {
                     <p class="mb-1"><strong>City:</strong> <?php echo htmlspecialchars($order['city']); ?></p>
                     <p class="mb-1"><strong>Region:</strong> <?php echo htmlspecialchars($order['region']); ?></p>
                     <p class="mb-1"><strong>Postal Code:</strong> <?php echo htmlspecialchars($order['postalcode']); ?></p>
+                    <p class="mb-1"><strong>Special Instructions:</strong> <?php echo htmlspecialchars(!empty($order['special_instructions']) ? $order['special_instructions'] : 'N/A'); ?></p>
                     <p class="mb-1 mt-2"><strong>Payment:</strong> <span class="text-uppercase"><?php echo htmlspecialchars($order['payment_method']); ?></span></p>
                 </div>
 

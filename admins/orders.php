@@ -99,6 +99,7 @@ require_once('./assets/inc/admin_top.php');
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>City / Country</th>
+                                    <th>Special Instructions</th>
                                     <th>Total Amount</th>
                                     <th>Payment</th>
                                     <th>Receipt</th>
@@ -150,6 +151,7 @@ require_once('./assets/inc/admin_top.php');
                                         <td><?php echo htmlspecialchars($row['phone']); ?></td>
                                         <td><?php echo htmlspecialchars($row['email']); ?></td>
                                         <td class="text-capitalize"><?php echo htmlspecialchars($row['city'] . ', ' . $row['region']); ?></td>
+                                        <td style="max-width: 200px; white-space: normal;"><?php echo !empty($row['special_instructions']) ? htmlspecialchars($row['special_instructions']) : '<span class="ma-muted small">N/A</span>'; ?></td>
                                         <td>Rs. <?php echo number_format($row['total'], 2); ?></td>
                                         <td class="text-uppercase"><?php echo htmlspecialchars($row['payment_method']); ?></td>
                                         <td class="text-center">

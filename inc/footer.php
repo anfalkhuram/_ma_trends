@@ -4,7 +4,7 @@
             <!-- Brand & Contact -->
             <div class="col-lg-4">
                 <a class="navbar-brand d-flex align-items-center gap-2 mb-3" href="index">
-                    <span class="ma-pill color-soft-gold fs-4"><img src="assets/img/ma_trends_ill.png" alt="logo" width="35"> <span class="h5 mb-0">Trends</span></span>
+                    <span class="ma-pill color-soft-gold fs-4"><img src="assets/img/ma_trends_ill.webp" alt="logo" width="35"> <span class="h5 mb-0">Trends</span></span>
                 </a>
                 <p class="ma-muted small mb-4" style="max-width: 300px;">
                     Curating the latest trends in fashion accessories. Premium looks, everyday prices, and fast delivery.
@@ -63,7 +63,7 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div class="ma-muted small">
                 &copy; <?php echo date('Y'); ?> MA Trends. Developed by 
-                <a href="https://cybersamuraisolutions.com" target="_blank" class="text-decoration-none color-gold fw-semibold">CyberSamurai Software Solutions</a>
+                <a href="https://anfalkhuram.com" target="_blank" class="text-decoration-none color-gold fw-semibold">Anfal Khuram</a>
             </div>
           
         </div>

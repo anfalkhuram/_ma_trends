@@ -1,6 +1,6 @@
   <aside class="ma-sidebar p-3 p-md-4 d-none d-md-block">
       <div class="d-flex align-items-center mb-4">
-        <span class=" h6"><img src="./assets/images/ma_trends_ill.png" alt="..." width="50" height="50"></span>
+        <span class=" h6"><img src="./assets/images/ma_trends_ill.webp" alt="..." width="50" height="50"></span>
         
       </div>
       <nav class="nav flex-column gap-1 ma-sidebar-nav">

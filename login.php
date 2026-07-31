@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="ma-card p-4 p-md-5 ma-shadow">
                 <div class="text-center">
                     <a href="index" class="text-decoration-none d-inline-flex align-items-center">
-                    <img src="./assets/img/ma_trends_ill.png" alt="" width="80" loading="lazy" class="ma-pill">    
+                    <img src="./assets/img/ma_trends_ill.webp" alt="" width="80" loading="lazy" class="ma-pill">    
                     
                     <!-- <span class="fw-bold text-white mt-3">Trends</span> -->
                     </a>

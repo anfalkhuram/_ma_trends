@@ -16,7 +16,7 @@ $pageName = ucwords(str_replace("-", " ", basename($_SERVER['PHP_SELF'], ".php")
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Admin <?php echo $pageName ?></title>
     <meta name="description" content="Admin dashboard UI — MA Trends." />
-    <link rel="shortcut icon" href="./assets/images/ma_trends_ill.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/images/ma_trends_ill.webp" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

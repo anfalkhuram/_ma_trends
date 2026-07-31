@@ -101,6 +101,11 @@ require_once('inc/top.php')
                                 <label class="form-label ma-muted">Postal code</label>
                                 <input class="form-control" name="shipping_postalcode" placeholder="ZIP" value="<?php echo htmlspecialchars($checkoutUserData['postal_code'] ?? ''); ?>" />
                             </div>
+                            <div class="col-12">
+                                <label class="form-label ma-muted">Special Instructions</label>
+                                <textarea class="form-control" name="special_instructions" placeholder="Write your specified color or other instructions (Max 20 words)" rows="2" required></textarea>
+                                <div class="form-text text-white" id="wordCountText">0/20 words</div>
+                            </div>
                         </div>
                     </div>
 
@@ -114,13 +119,13 @@ require_once('inc/top.php')
                             <div class="form-check mt-3">
                                 <input class="form-check-input mt-4" type="radio" name="paymentMethod" value="easypaisa" id="pay2" />
                                 <label class="form-check-label ma-muted" for="pay2">
-                                    <img src="./assets/img/Easypaisa.png" alt="easypaisa" width="120" class="bg-light p-3 rounded"/>
+                                    <img src="./assets/img/Easypaisa.webp" alt="easypaisa" width="120" class="bg-light p-3 rounded"/>
                                 </label>
                             </div>
                             <div class="form-check mt-3">
                                 <input class="form-check-input mt-4" type="radio" name="paymentMethod" value="jazzcash" id="pay3" />
                                 <label class="form-check-label ma-muted" for="pay3">
-                                    <img src="./assets/img/JazzCash.png" alt="jazzCash" width="120" class="bg-light p-3 rounded"/>
+                                    <img src="./assets/img/JazzCash.webp" alt="jazzCash" width="120" class="bg-light p-3 rounded"/>
                                 </label>
                             </div>
                             <div class="form-check mt-3">
@@ -243,8 +248,22 @@ require_once('inc/top.php')
             const paymentDetailsModal = new bootstrap.Modal(paymentDetailsModalEl);
             const placeOrderModal = new bootstrap.Modal(placeOrderModalEl);
             
+            // Special instructions word count limit
+            const specialInstructions = document.querySelector('textarea[name="special_instructions"]');
+            const wordCountText = document.getElementById('wordCountText');
+            if (specialInstructions) {
+                specialInstructions.addEventListener('input', function() {
+                    let words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+                    if (words.length > 20) {
+                        words = words.slice(0, 20);
+                        this.value = words.join(' ');
+                    }
+                    wordCountText.textContent = `${words.length}/20 words`;
+                });
+            }
+
             // Clear validation error on input
-            const shippingInputs = document.querySelectorAll('#shippingDetailsForm input');
+            const shippingInputs = document.querySelectorAll('#shippingDetailsForm input, #shippingDetailsForm textarea');
             shippingInputs.forEach(input => {
                 input.addEventListener('input', function() {
                     if (this.value.trim() !== '') {

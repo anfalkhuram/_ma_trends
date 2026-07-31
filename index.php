@@ -31,8 +31,8 @@ require_once('inc/top.php');
                     <div class="col-lg-6 ma-hero-img-col">
                         <div class="ma-hero-art h-100">
                             <picture>
-                                <source media="(max-width: 991px)" srcset="assets/img/hero-image-small.jpeg">
-                                <img src="assets/img/hero-image.jpeg" alt="MA Trends — Premium Accessories Collection" class="ma-hero-img" loading="eager">
+                                <source media="(max-width: 991px)" srcset="assets/img/hero-image-small.webp">
+                                <img src="assets/img/hero-image.webp" alt="MA Trends — Premium Accessories Collection" class="ma-hero-img" fetchpriority="high" decoding="async">
                             </picture>
                             <!-- Luxury overlay -->
                             <div class="ma-hero-img-overlay"></div>
@@ -73,6 +73,47 @@ require_once('inc/top.php');
             </div>
         </div>
     </header>
+
+    <!-- Azadi Sale Countdown -->
+    <section class="ma-section pb-0" id="azadi-sale">
+        <div class="container">
+            <div class="ma-hero-card ma-shadow p-4 p-md-5 text-center" style="background: linear-gradient(135deg, rgba(17, 19, 25, .95), rgba(215, 180, 106, .15)); border: 1px solid var(--ma-gold); margin-bottom: 30px;">
+                <div class="ma-hero-shimmer"></div>
+                <div class="ma-kicker mb-3 justify-content-center">
+                    <span class="ma-kicker-diamond">◆</span> Independence Special
+                </div>
+                <h2 class="ma-hero-headline mb-2">Azadi Sale <span class="ma-gold-text">Is Here!</span></h2>
+                <p class="lead ma-muted mb-4">Celebrate freedom with 100% Free Delivery on all orders for the entire month of August.</p>
+                
+                <div class="d-flex justify-content-center align-items-center gap-3 gap-md-4 mb-4" id="countdown-timer">
+                    <div class="text-center">
+                        <div class="display-5 fw-bold mb-0 ma-gold-text" id="cd-days">00</div>
+                        <div class="small ma-muted text-uppercase" style="letter-spacing: 1px;">Days</div>
+                    </div>
+                    <div class="display-6 fw-bold ma-muted pb-3">:</div>
+                    <div class="text-center">
+                        <div class="display-5 fw-bold mb-0 ma-gold-text" id="cd-hours">00</div>
+                        <div class="small ma-muted text-uppercase" style="letter-spacing: 1px;">Hours</div>
+                    </div>
+                    <div class="display-6 fw-bold ma-muted pb-3">:</div>
+                    <div class="text-center">
+                        <div class="display-5 fw-bold mb-0 ma-gold-text" id="cd-minutes">00</div>
+                        <div class="small ma-muted text-uppercase" style="letter-spacing: 1px;">Mins</div>
+                    </div>
+                    <div class="display-6 fw-bold ma-muted pb-3">:</div>
+                    <div class="text-center">
+                        <div class="display-5 fw-bold mb-0 ma-gold-text" id="cd-seconds">00</div>
+                        <div class="small ma-muted text-uppercase" style="letter-spacing: 1px;">Secs</div>
+                    </div>
+                </div>
+
+                <a class="btn btn-ma btn-ma-hero mt-2" href="shop">
+                    <span>Shop the Sale</span>
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Trending This Week -->
     <section class="ma-section pt-0" id="trending">
@@ -190,8 +231,8 @@ require_once('inc/top.php');
                     <div class="col-lg-6 order-lg-2 ma-couple-img-col">
                         <div class="ma-couple-art h-100">
                             <picture>
-                                <source media="(max-width: 991px)" srcset="assets/img/couple-collection-small.jpeg">
-                                <img src="assets/img/couple-collection.jpeg" alt="Couple Collection" class="ma-couple-img" loading="lazy">
+                                <source media="(max-width: 991px)" srcset="assets/img/couple-collection-small.webp">
+                                <img src="assets/img/couple-collection.webp" alt="Couple Collection" class="ma-couple-img" loading="lazy">
                             </picture>
                             <div class="ma-couple-img-overlay"></div>
                         </div>
@@ -293,6 +334,43 @@ require_once('inc/top.php');
     require_once('inc/bottom.php');
     ?>
     
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Target is August 31, end of the day
+            const currentYear = new Date().getFullYear();
+            // Since it's for the full month of August, set target to Aug 31 of current year
+            const targetDate = new Date(`August 31, ${currentYear} 23:59:59`).getTime();
+
+            const timer = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    const cdEl = document.getElementById("countdown-timer");
+                    if (cdEl) {
+                        cdEl.innerHTML = "<div class='h4 fw-bold ma-gold-text'>The Azadi Sale Has Ended!</div>";
+                    }
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const elDays = document.getElementById("cd-days");
+                const elHours = document.getElementById("cd-hours");
+                const elMinutes = document.getElementById("cd-minutes");
+                const elSeconds = document.getElementById("cd-seconds");
+
+                if (elDays) elDays.innerText = days.toString().padStart(2, '0');
+                if (elHours) elHours.innerText = hours.toString().padStart(2, '0');
+                if (elMinutes) elMinutes.innerText = minutes.toString().padStart(2, '0');
+                if (elSeconds) elSeconds.innerText = seconds.toString().padStart(2, '0');
+            }, 1000);
+        });
+    </script>
 </body>
 
 </html>

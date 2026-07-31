@@ -26,10 +26,10 @@ if($pageName == 'Index'){
   <title><?php echo $pageTitle ?></title>
 
 
-  <link rel="shortcut icon" href="assets/img/ma_trends_ill.png" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/img/ma_trends_ill.webp" type="image/x-icon">
   
   <!-- Preload critical assets -->
-  <link rel="preload" href="assets/img/hero-image.jpeg" as="image">
+  <link rel="preload" href="assets/img/hero-image.webp" as="image" fetchpriority="high">
   
   <!-- Google Fonts (Poppins + Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

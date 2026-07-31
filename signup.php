@@ -62,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // Redirect to verification page
                     $redirectParam = $redirect ? '&redirect=' . urlencode($redirect) : '';
-                    header("Location: verify_otp.php?email=" . urlencode($email) . "&purpose=signup_verification" . $redirectParam);
+                    $_SESSION['signup_verification_email'] = $safeEmail;
+                    header("Location: verify_otp.php?purpose=signup_verification" . $redirectParam);
                     exit();
                 } else {
                     $registerError = 'Something went wrong. Please try again.';
@@ -91,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="ma-card p-4 p-md-5 ma-shadow">
                     <div class="text-center mb-4">
                         <a href="index" class="text-decoration-none d-inline-flex align-items-center gap-2">
-                            <img src="./assets/img/ma_trends_ill.png" alt="" width="80" loading="lazy" class="ma-pill">
+                            <img src="./assets/img/ma_trends_ill.webp" alt="" width="80" loading="lazy" class="ma-pill">
                         </a>
                         <div class="ma-muted">Join the Community</div>
                     </div>
